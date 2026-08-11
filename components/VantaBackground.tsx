@@ -53,6 +53,8 @@ export default function VantaBackground() {
           color: 0x8f0b16,
           color2: 0x300509,
           size: 0.75,
+          mouseCoeffX: 1.4,
+          mouseCoeffY: 1.4,
         });
       } catch (err) {
         console.warn("VantaBackground:", err);
