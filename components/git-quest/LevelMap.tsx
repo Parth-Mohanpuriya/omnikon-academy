@@ -1,210 +1,122 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, Lock, ChevronRight, Sparkles } from "lucide-react";
-import { levels, getLevelsByDifficulty } from "@/lib/git-quest/levels";
+import { Lock, CheckCircle2 } from "lucide-react";
+import { levels } from "@/lib/git-quest/levels";
 import type { GameState } from "@/lib/git-quest/types";
+import { useGlassPointer } from "./useGlassPointer";
 
 interface LevelMapProps {
   state: GameState;
-  onStartLevel: (levelId: string) => void;
+  onSelectLevel: (levelId: string) => void;
 }
 
-const tierConfig = {
-  beginner: {
-    label: "Tier 1 — Local Basics",
-    color: "var(--gq-committed)",
-    icon: "📦",
-  },
-  "beginner-intermediate": {
-    label: "Tier 2 — Remotes & Branches",
-    color: "var(--gq-branch-feature)",
-    icon: "🌿",
-  },
-  intermediate: {
-    label: "Tier 3 — GitHub Flow",
-    color: "var(--gq-staged)",
-    icon: "🔀",
-  },
-  advanced: {
-    label: "Tier 4 — CI/CD & Actions",
-    color: "var(--gq-conflict)",
-    icon: "⚡",
-  },
-} as const;
+function getTier(levelNumber: number): number {
+  if (levelNumber <= 3) return 1;
+  if (levelNumber <= 6) return 2;
+  if (levelNumber <= 9) return 3;
+  return 4;
+}
 
-const tierOrder: Array<keyof typeof tierConfig> = [
-  "beginner",
-  "beginner-intermediate",
-  "intermediate",
-  "advanced",
-];
+const tierNames: Record<number, string> = {
+  1: "Foundations",
+  2: "Branching",
+  3: "Collaboration",
+  4: "CI/CD Mastery",
+};
 
-export default function LevelMap({ state, onStartLevel }: LevelMapProps) {
+export default function LevelMap({ state, onSelectLevel }: LevelMapProps) {
+  const glass = useGlassPointer();
+
+  const tiers = [1, 2, 3, 4].map((tierNum) => ({
+    number: tierNum,
+    name: tierNames[tierNum],
+    levels: levels.filter((l) => getTier(l.number) === tierNum),
+  }));
+
   return (
-    <div className="space-y-8">
-      {/* Header */}
+    <div className="space-y-6">
       <div className="text-center space-y-2">
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 rounded-full border border-gq-border bg-gq-surface px-3 py-1"
-        >
-          <Sparkles className="h-3.5 w-3.5 text-gq-committed" />
-          <span className="text-[10px] font-mono text-gq-text-secondary">
-            {state.completedLevelIds.length}/{levels.length} MISSIONS COMPLETE
-          </span>
-        </motion.div>
-        <h2 className="text-2xl font-extrabold text-gq-text">Quest Map</h2>
-        <p className="text-xs text-gq-text-muted max-w-md mx-auto">
-          Complete missions to earn XP and badges. Each tier unlocks new Git superpowers.
+        <h1 className="text-3xl font-extrabold text-gq-text">Git Quest</h1>
+        <p className="text-sm text-gq-text-secondary max-w-md mx-auto">
+          Master Git & GitHub Actions through interactive missions. Learn by doing.
         </p>
       </div>
 
-      {/* Tiers with connecting line motif */}
-      {tierOrder.map((difficulty, tierIdx) => {
-        const tierLevels = getLevelsByDifficulty(difficulty);
-        const config = tierConfig[difficulty];
-        if (tierLevels.length === 0) return null;
+      {tiers.map((tier) => {
+        const allPrevCompleted =
+          tier.number === 1 ||
+          tiers
+            .filter((t) => t.number < tier.number)
+            .every((t) =>
+              t.levels.every((l) => state.completedLevelIds.includes(l.id))
+            );
 
         return (
-          <motion.div
-            key={difficulty}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: tierIdx * 0.08 }}
-          >
-            {/* Tier header */}
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-sm">{config.icon}</span>
-              <span
-                className="text-[10px] font-mono font-bold uppercase tracking-widest"
-                style={{ color: config.color }}
-              >
-                {config.label}
+          <div key={tier.number}>
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-[10px] font-mono text-gq-text-muted uppercase tracking-widest">
+                Tier {tier.number}
               </span>
-              <div
-                className="flex-1 h-px"
-                style={{ backgroundColor: `${config.color}20` }}
-              />
+              <span className="text-[10px] text-gq-text-muted">—</span>
+              <span className="text-[10px] font-mono text-gq-text-secondary font-bold uppercase tracking-wider">
+                {tier.name}
+              </span>
             </div>
 
-            {/* Level cards — connected path */}
-            <div className="relative ml-4">
-              {/* Connecting line */}
-              <div
-                className="absolute left-[15px] top-0 bottom-0 w-px"
-                style={{ backgroundColor: `${config.color}20` }}
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {tier.levels.map((level) => {
+                const isCompleted = state.completedLevelIds.includes(level.id);
+                const isUnlocked = allPrevCompleted;
+                const isActive = state.currentLevelId === level.id;
 
-              <div className="space-y-3">
-                {tierLevels.map((level, idx) => {
-                  const isCompleted = state.completedLevelIds.includes(level.id);
-                  const prevLevel = tierLevels[idx - 1];
-                  const isLocked =
-                    !isCompleted &&
-                    prevLevel &&
-                    !state.completedLevelIds.includes(prevLevel.id);
-                  const isNext =
-                    !isCompleted &&
-                    !isLocked &&
-                    (idx === 0 ||
-                      state.completedLevelIds.includes(tierLevels[idx - 1].id));
-
-                  return (
-                    <motion.button
-                      key={level.id}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: tierIdx * 0.08 + idx * 0.04,
-                        duration: 0.25,
-                      }}
-                      onClick={() => !isLocked && onStartLevel(level.id)}
-                      disabled={isLocked}
-                    className={`relative flex items-center gap-4 w-full text-left rounded-xl p-4 transition-all gq-focus-ring ${
-                      isLocked
-                        ? "opacity-40 cursor-not-allowed"
-                        : isNext
-                        ? "hover:bg-gq-surface-raised cursor-pointer"
-                        : isCompleted
-                        ? "hover:bg-gq-surface-raised cursor-pointer"
-                        : "hover:bg-gq-surface-raised cursor-pointer"
-                    }`}
-                    style={
-                      isNext
-                        ? { boxShadow: `inset 0 0 0 1px ${config.color}30` }
-                        : undefined
-                    }
-                      aria-label={`${isCompleted ? "Completed: " : isLocked ? "Locked: " : ""}Level ${level.number}: ${level.title}`}
+                return (
+                  <div
+                    key={level.id}
+                    className={`gq-glass gq-glass-1 overflow-hidden transition-all ${
+                      isUnlocked
+                        ? "hover:border-gq-committed/40 cursor-pointer"
+                        : "opacity-40 cursor-not-allowed"
+                    } ${isActive ? "border-gq-committed/40" : ""}`}
+                    {...(isUnlocked ? glass : {})}
+                  >
+                    <div className="gq-glass-rim" />
+                    <button
+                      onClick={() => onSelectLevel(level.id)}
+                      disabled={!isUnlocked}
+                      className="relative z-10 w-full text-left p-4"
                     >
-                      {/* Node on the path line */}
-                      <div className="relative z-10 flex-shrink-0">
-                        <div
-                          className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold font-mono border ${
-                            isCompleted
-                              ? ""
-                              : isLocked
-                              ? "border-gq-border bg-gq-base text-gq-text-muted"
-                              : isNext
-                              ? "border-current"
-                              : "border-gq-border bg-gq-base text-gq-text-secondary"
-                          }`}
-                          style={
-                            isCompleted
-                              ? {
-                                  backgroundColor: `${config.color}15`,
-                                  borderColor: `${config.color}30`,
-                                  color: config.color,
-                                }
-                              : isNext
-                              ? {
-                                  backgroundColor: `${config.color}10`,
-                                  borderColor: `${config.color}40`,
-                                  color: config.color,
-                                  boxShadow: `0 0 12px ${config.color}15`,
-                                }
-                              : undefined
-                          }
-                        >
-                          {isCompleted ? (
-                            <Check className="h-4 w-4" />
-                          ) : isLocked ? (
-                            <Lock className="h-3.5 w-3.5" />
-                          ) : (
-                            level.number
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Level info */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-bold text-gq-text">
-                          {level.title}
-                        </h3>
-                        <p className="text-[10px] text-gq-text-muted font-mono">
-                          {level.subtitle}
-                        </p>
-                      </div>
-
-                      {/* XP + arrow */}
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        <span className="text-[9px] font-mono text-gq-text-muted">
-                          +{level.xpReward} XP
+                      <div className="flex items-start justify-between mb-2">
+                        <span className="text-[10px] font-mono text-gq-text-muted">
+                          Level {level.number}
                         </span>
-                        {!isLocked && (
-                          <ChevronRight
-                            className="h-4 w-4"
-                            style={{ color: isNext ? config.color : "var(--gq-text-muted)" }}
-                          />
+                        {isCompleted && (
+                          <CheckCircle2 className="h-4 w-4 text-gq-committed flex-shrink-0" />
+                        )}
+                        {!isUnlocked && (
+                          <Lock className="h-3.5 w-3.5 text-gq-text-muted/40 flex-shrink-0" />
                         )}
                       </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
+                      <h3 className="text-sm font-bold text-gq-text mb-0.5">
+                        {level.title}
+                      </h3>
+                      <p className="text-[11px] text-gq-text-muted leading-snug">
+                        {level.subtitle}
+                      </p>
+                      <div className="flex items-center gap-3 mt-2.5">
+                        <span className="text-[9px] font-mono text-gq-committed">
+                          +{level.xpReward} XP
+                        </span>
+                        <span className="text-[9px] font-mono text-gq-text-muted">
+                          {level.difficulty.replace("-", " ")}
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          </motion.div>
+          </div>
         );
       })}
     </div>

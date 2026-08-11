@@ -26,7 +26,6 @@ import { getLevelById, getNextLevel, levels } from "@/lib/git-quest/levels";
 export default function GitQuestPage() {
   const [state, dispatch] = useReducer(gameReducer, initialState);
   const [mascotMsg, setMascotMsg] = useState<string | undefined>();
-  const [mascotState, setMascotState] = useState<"idle" | "thinking" | "celebrating">("idle");
 
   const currentLevel = state.currentLevelId
     ? getLevelById(state.currentLevelId)
@@ -35,21 +34,18 @@ export default function GitQuestPage() {
   const handleStartLevel = useCallback((levelId: string) => {
     dispatch({ type: "START_LEVEL", levelId });
     setMascotMsg(undefined);
-    setMascotState("idle");
   }, []);
 
   const handleDismissIntro = useCallback(() => {
     dispatch({ type: "DISMISS_INTRO" });
     if (currentLevel) {
       setMascotMsg(`Ready! Type your first command to begin "${currentLevel.title}".`);
-      setMascotState("idle");
     }
   }, [currentLevel]);
 
   const handleBackToMap = useCallback(() => {
     dispatch({ type: "RESET_GAME" });
     setMascotMsg(undefined);
-    setMascotState("idle");
   }, []);
 
   const handleExecute = useCallback(
@@ -80,22 +76,17 @@ export default function GitQuestPage() {
       );
 
       if (allComplete && result.objectivesCompleted.length > 0) {
-        setMascotState("celebrating");
         setTimeout(() => {
           dispatch({ type: "COMPLETE_LEVEL", levelId: currentLevel.id });
           setMascotMsg(undefined);
-          setMascotState("idle");
         }, 600);
       } else if (result.output.some((l) => l.type === "error")) {
         setMascotMsg("That didn't quite work. Try 'hint' if you need a nudge.");
-        setMascotState("thinking");
         setTimeout(() => {
           setMascotMsg(undefined);
-          setMascotState("idle");
         }, 4000);
       } else if (result.output.some((l) => l.type === "success")) {
         setMascotMsg("Nice work. Keep going.");
-        setMascotState("idle");
         setTimeout(() => setMascotMsg(undefined), 2500);
       }
     },
@@ -174,11 +165,11 @@ export default function GitQuestPage() {
 
         {/* Main content: either map or active level */}
         {!state.isLevelActive ? (
-          <LevelMap state={state} onStartLevel={handleStartLevel} />
+          <LevelMap state={state} onSelectLevel={handleStartLevel} />
         ) : currentLevel ? (
           <div className="space-y-5">
             {/* Mascot hint */}
-            <Mascot message={mascotMsg} visible={!!mascotMsg} state={mascotState} />
+            <Mascot message={mascotMsg} />
 
             {/* Objectives */}
             <ObjectiveTracker
@@ -215,7 +206,11 @@ export default function GitQuestPage() {
               currentLevel.id
             ) && (
               <div className="mt-5">
-                <MockGitHubUI levelId={currentLevel.id} />
+                <MockGitHubUI
+                  currentBranch={state.gitState.currentBranch}
+                  stagedFiles={state.gitState.stagingArea ?? []}
+                  committedFiles={state.gitState.files.filter((f) => f.status === "committed")}
+                />
               </div>
             )}
           </div>

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Zap, ArrowRight, RotateCcw } from "lucide-react";
 import type { Level, Badge } from "@/lib/git-quest/types";
+import { useGlassPointer } from "./useGlassPointer";
 
 interface CompletionModalProps {
   level: Level;
@@ -21,29 +22,33 @@ export default function CompletionModal({
   onReplay,
   isLastLevel,
 }: CompletionModalProps) {
+  const glass = useGlassPointer();
+
   return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-gq-base/80 backdrop-blur-sm p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: "rgba(5, 8, 18, 0.75)" }}
         role="dialog"
         aria-modal="true"
         aria-label="Level complete"
       >
+        {/* Tier 3 modal glass */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.97 }}
           transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          className="w-full max-w-md rounded-xl border border-gq-committed/20 bg-gq-surface p-8 shadow-2xl relative overflow-hidden"
+          className="gq-glass gq-glass-3 w-full max-w-md overflow-hidden shadow-2xl"
+          {...glass}
         >
-          {/* Top accent */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gq-committed/60 to-transparent" />
+          <div className="gq-glass-rim" />
 
-          <div className="relative text-center space-y-6">
-            {/* Trophy — one orchestrated entrance */}
+          <div className="relative z-10 p-8 text-center space-y-6">
+            {/* Trophy */}
             <motion.div
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: 1, rotate: 0 }}
@@ -58,7 +63,6 @@ export default function CompletionModal({
               <Trophy className="h-8 w-8 text-gq-committed" />
             </motion.div>
 
-            {/* Text — staggered, not competing */}
             <div className="space-y-2">
               <motion.h2
                 initial={{ opacity: 0, y: 8 }}
@@ -78,7 +82,6 @@ export default function CompletionModal({
               </motion.p>
             </div>
 
-            {/* XP earned */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -91,13 +94,12 @@ export default function CompletionModal({
               </span>
             </motion.div>
 
-            {/* Badge — shown only if earned */}
             {badge && (
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.55 }}
-                className="inline-flex items-center gap-3 rounded-lg border border-gq-border bg-gq-base px-4 py-3"
+                className="inline-flex items-center gap-3 rounded-lg bg-white/[0.03] border border-white/[0.06] px-4 py-3"
               >
                 <span className="text-xl">{badge.icon}</span>
                 <div className="text-left">
@@ -107,7 +109,6 @@ export default function CompletionModal({
               </motion.div>
             )}
 
-            {/* Actions — clear, not competing */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -116,7 +117,7 @@ export default function CompletionModal({
             >
               <button
                 onClick={onReplay}
-                className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-gq-border bg-gq-base hover:bg-gq-surface-raised py-3 text-xs text-gq-text-secondary font-mono font-medium transition-colors gq-focus-ring"
+                className="flex-1 flex items-center justify-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] py-3 text-xs text-gq-text-secondary font-mono font-medium transition-colors gq-focus-ring"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Replay

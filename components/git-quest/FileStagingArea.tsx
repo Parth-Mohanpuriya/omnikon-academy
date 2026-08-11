@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { GitFile } from "@/lib/git-quest/types";
+import { useGlassPointer } from "./useGlassPointer";
 
 interface FileStagingAreaProps {
   files: GitFile[];
@@ -36,6 +37,7 @@ function FileCard({ file, color }: { file: GitFile; color: string }) {
 }
 
 export default function FileStagingArea({ files, stagingArea }: FileStagingAreaProps) {
+  const glass = useGlassPointer();
   const untracked = files.filter((f) => f.status === "untracked");
   const staged =
     stagingArea.length > 0 ? stagingArea : files.filter((f) => f.status === "staged");
@@ -63,113 +65,116 @@ export default function FileStagingArea({ files, stagingArea }: FileStagingAreaP
   ];
 
   return (
-    <div className="gq-panel p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-[10px] font-mono text-gq-text-muted uppercase tracking-widest">
-          File State
-        </span>
-      </div>
+    <div className="gq-glass gq-glass-1 overflow-hidden" {...glass}>
+      <div className="gq-glass-rim" />
+      <div className="relative z-10 p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-[10px] font-mono text-gq-text-muted uppercase tracking-widest">
+            File State
+          </span>
+        </div>
 
-      {/* Desktop: 3-column with arrows */}
-      <div className="hidden sm:grid sm:grid-cols-5 gap-2 items-start">
-        {columns.map((col, colIdx) => (
-          <div key={col.label} className={`${colIdx < 2 ? "col-span-2" : "col-span-1"}`}>
-            {/* Column header */}
-            <div className="flex items-center gap-1.5 mb-2">
-              <div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: col.color }}
-              />
-              <span
-                className="text-[9px] font-mono font-bold uppercase tracking-wider"
-                style={{ color: col.color }}
-              >
-                {col.label}
-              </span>
-            </div>
-
-            {/* File cards */}
-            <div
-              className="rounded-lg border p-2 min-h-[52px] space-y-1.5"
-              style={{
-                borderColor: `${col.color}15`,
-                backgroundColor: `${col.color}05`,
-              }}
-            >
-              <AnimatePresence mode="popLayout">
-                {col.items.map((file) => (
-                  <FileCard
-                    key={`${col.label}-${file.name}`}
-                    file={file}
-                    color={col.color}
-                  />
-                ))}
-              </AnimatePresence>
-              {col.items.length === 0 && (
-                <span className="text-[9px] font-mono block text-center py-2" style={{ color: `${col.color}50` }}>
-                  {col.emptyText}
+        {/* Desktop: 3-column with arrows */}
+        <div className="hidden sm:grid sm:grid-cols-5 gap-2 items-start">
+          {columns.map((col, colIdx) => (
+            <div key={col.label} className={`${colIdx < 2 ? "col-span-2" : "col-span-1"}`}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <div
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: col.color }}
+                />
+                <span
+                  className="text-[9px] font-mono font-bold uppercase tracking-wider"
+                  style={{ color: col.color }}
+                >
+                  {col.label}
                 </span>
-              )}
-            </div>
-          </div>
-        ))}
+              </div>
 
-        {/* Directional arrows between columns */}
-        <div className="col-span-5 flex justify-center gap-8 -mt-1">
-          <div className="flex items-center gap-1 text-gq-text-muted/40">
-            <ArrowRight className="h-3 w-3" />
-            <span className="text-[8px] font-mono">add</span>
-          </div>
-          <div className="flex items-center gap-1 text-gq-text-muted/40">
-            <ArrowRight className="h-3 w-3" />
-            <span className="text-[8px] font-mono">commit</span>
+              <div
+                className="rounded-lg border p-2 min-h-[52px] space-y-1.5"
+                style={{
+                  borderColor: `${col.color}15`,
+                  backgroundColor: `${col.color}05`,
+                }}
+              >
+                <AnimatePresence mode="popLayout">
+                  {col.items.map((file) => (
+                    <FileCard
+                      key={`${col.label}-${file.name}`}
+                      file={file}
+                      color={col.color}
+                    />
+                  ))}
+                </AnimatePresence>
+                {col.items.length === 0 && (
+                  <span
+                    className="text-[9px] font-mono block text-center py-2"
+                    style={{ color: `${col.color}50` }}
+                  >
+                    {col.emptyText}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <div className="col-span-5 flex justify-center gap-8 -mt-1">
+            <div className="flex items-center gap-1 text-gq-text-muted/40">
+              <ArrowRight className="h-3 w-3" />
+              <span className="text-[8px] font-mono">add</span>
+            </div>
+            <div className="flex items-center gap-1 text-gq-text-muted/40">
+              <ArrowRight className="h-3 w-3" />
+              <span className="text-[8px] font-mono">commit</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile: stacked layout */}
-      <div className="sm:hidden space-y-3">
-        {columns.map((col) => (
-          <div key={col.label}>
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: col.color }}
-              />
-              <span
-                className="text-[9px] font-mono font-bold uppercase tracking-wider"
-                style={{ color: col.color }}
-              >
-                {col.label}
-              </span>
-              <span className="text-[9px] font-mono text-gq-text-muted">
-                ({col.items.length})
-              </span>
-            </div>
-            <div
-              className="rounded-lg border p-2 min-h-[36px] flex flex-wrap gap-1.5"
-              style={{
-                borderColor: `${col.color}15`,
-                backgroundColor: `${col.color}05`,
-              }}
-            >
-              <AnimatePresence mode="popLayout">
-                {col.items.map((file) => (
-                  <FileCard
-                    key={`${col.label}-${file.name}`}
-                    file={file}
-                    color={col.color}
-                  />
-                ))}
-              </AnimatePresence>
-              {col.items.length === 0 && (
-                <span className="text-[9px] font-mono text-gq-text-muted/40 py-1">
-                  {col.emptyText}
+        {/* Mobile: stacked layout */}
+        <div className="sm:hidden space-y-3">
+          {columns.map((col) => (
+            <div key={col.label}>
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <div
+                  className="w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: col.color }}
+                />
+                <span
+                  className="text-[9px] font-mono font-bold uppercase tracking-wider"
+                  style={{ color: col.color }}
+                >
+                  {col.label}
                 </span>
-              )}
+                <span className="text-[9px] font-mono text-gq-text-muted">
+                  ({col.items.length})
+                </span>
+              </div>
+              <div
+                className="rounded-lg border p-2 min-h-[36px] flex flex-wrap gap-1.5"
+                style={{
+                  borderColor: `${col.color}15`,
+                  backgroundColor: `${col.color}05`,
+                }}
+              >
+                <AnimatePresence mode="popLayout">
+                  {col.items.map((file) => (
+                    <FileCard
+                      key={`${col.label}-${file.name}`}
+                      file={file}
+                      color={col.color}
+                    />
+                  ))}
+                </AnimatePresence>
+                {col.items.length === 0 && (
+                  <span className="text-[9px] font-mono text-gq-text-muted/40 py-1">
+                    {col.emptyText}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
