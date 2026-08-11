@@ -16,6 +16,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Marquee from "@/components/Marquee";
 import LiveActivityFeed from "@/components/LiveActivityFeed";
+import HeroGlobeTags from "@/components/HeroGlobeTags";
 import { mockLearningPaths, mockCourses } from "@/lib/mock-data";
 
 // ----------------------------------------------------
@@ -167,8 +168,10 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Hero Right - Vanta Globe (rendered globally via VantaBackground) */}
-          <div className="lg:col-span-5 relative h-[400px] w-full mt-8 lg:mt-0" />
+          {/* Hero Right - Vanta Globe with Orbital Tags */}
+          <div className="lg:col-span-5 relative h-[400px] w-full mt-8 lg:mt-0">
+            <HeroGlobeTags />
+          </div>
 
         </div>
       </section>
