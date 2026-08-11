@@ -3,14 +3,18 @@
 :root {
   --background: #030303;
   --foreground: #f4f4f5;
-  
+
   --primary: 263 90% 64%; /* Violet #8b5cf6 */
-  --primary-glow: rgba(139, 92, 246, 0.15);
-  
-  --accent: 339 90% 60%; /* Crimson/Pink #ec4899 */
-  --accent-glow: rgba(236, 72, 153, 0.15);
-  
+  --primary-glow: rgba(139, 92, 246, 0.08);
+
+  --accent: 339 80% 55%; /* Softer Crimson/Pink */
+  --accent-glow: rgba(236, 72, 153, 0.08);
+
   --terminal-green: 142 76% 45%; /* #10b981 */
+}
+
+html {
+  background-color: #030303;
 }
 
 @theme {
@@ -24,7 +28,7 @@
 }
 
 body {
-  background-color: #030303;
+  background-color: transparent;
   color: #f4f4f5;
   font-family: var(--font-geist-sans), sans-serif;
   overflow-x: hidden;
@@ -32,19 +36,18 @@ body {
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #030303;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #18181b;
-  border-radius: 4px;
-  border: 1px solid #27272a;
+  background: #1c1c1f;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #27272a;
+  background: #2a2a2d;
 }
 
 /* Custom background grid */
@@ -53,9 +56,9 @@ body {
   z-index: 1;
   pointer-events: none;
   background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(239, 68, 68, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(239, 68, 68, 0.015) 1px, transparent 1px);
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
 
 .grid-bg-glow {
@@ -65,7 +68,7 @@ body {
   right: 0;
   bottom: 0;
   z-index: 1;
-  background: radial-gradient(circle 800px at 50% -100px, rgba(239, 68, 68, 0.04), transparent 80%);
+  background: radial-gradient(circle 800px at 50% -100px, rgba(255, 255, 255, 0.015), transparent 80%);
   pointer-events: none;
 }
 
@@ -73,7 +76,7 @@ body {
 .glow-card {
   position: relative;
   transition: all 0.3s ease;
-  background: rgba(8, 8, 8, 0.8);
+  background: rgba(8, 8, 8, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -83,7 +86,7 @@ body {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(to bottom right, rgba(239, 68, 68, 0.15), transparent 60%);
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.04), transparent 60%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -94,32 +97,37 @@ body {
 
 .glow-card:hover::after {
   opacity: 1;
-  background: linear-gradient(to bottom right, rgba(239, 68, 68, 0.35), transparent 70%);
+  background: linear-gradient(to bottom right, rgba(239, 68, 68, 0.15), transparent 70%);
+}
+
+.glow-card:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 10, 0.7);
 }
 
 .glow-btn-red {
   position: relative;
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.06);
   transition: all 0.3s ease;
   background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-  border: 1px solid rgba(239, 68, 68, 0.5);
+  border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
 .glow-btn-red:hover {
-  box-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
   transform: translateY(-1px);
 }
 
 .glow-btn-violet {
   position: relative;
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.06);
   transition: all 0.3s ease;
   background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-  border: 1px solid rgba(139, 92, 246, 0.5);
+  border: 1px solid rgba(139, 92, 246, 0.4);
 }
 
 .glow-btn-violet:hover {
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
   transform: translateY(-1px);
 }
 
@@ -135,11 +143,11 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 0.4rem;
-  background: rgba(120, 0, 10, 0.12);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 50, 60, 0.18);
-  box-shadow: 0 0 20px rgba(180, 0, 20, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
   opacity: 0;
   transition: opacity 0.2s ease-out;
   pointer-events: none;
@@ -158,3 +166,33 @@ body {
 @keyframes blink {
   50% { opacity: 0; }
 }
+
+/* Subtle fade-in/slide-up animation utilities */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+
+.animation-delay-100 { animation-delay: 0.1s; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-300 { animation-delay: 0.3s; }
+.animation-delay-400 { animation-delay: 0.4s; }

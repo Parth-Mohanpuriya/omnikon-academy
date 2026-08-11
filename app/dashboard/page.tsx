@@ -89,7 +89,7 @@ export default function DashboardPage() {
   }, [enrolledCourses, courseProgressMap]);
 
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
 
@@ -121,24 +121,24 @@ export default function DashboardPage() {
                 <UserIcon className="h-6 w-6 text-red-500" />
               </div>
               <div>
-                <span className="font-mono text-[10px] text-red-400 font-bold block mb-0.5">DEV_ENVIRONMENT: ACTIVE</span>
-                <h1 className="text-2xl font-extrabold text-white font-mono">{mockUser.name}</h1>
-                <p className="text-xs text-zinc-500 font-mono mt-0.5">ROLE: SYSTEM_ENGINEER_IN_TRAINING</p>
+                <span className="text-[10px] text-zinc-500 block mb-0.5">DEV_ENVIRONMENT: ACTIVE</span>
+                <h1 className="text-2xl font-extrabold text-white">{mockUser.name}</h1>
+                <p className="text-xs text-zinc-500 mt-0.5">ROLE: SYSTEM_ENGINEER_IN_TRAINING</p>
               </div>
             </div>
 
             {/* Quick Stats Column */}
-            <div className="grid grid-cols-3 gap-6 text-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8 font-mono text-xs">
+            <div className="grid grid-cols-3 gap-6 text-center border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-8 text-xs">
               <div>
-                <p className="text-zinc-500 text-[9px] uppercase tracking-wider mb-1">COURSES</p>
+                <p className="text-zinc-500 text-[9px] uppercase tracking-wider mb-1">Courses</p>
                 <p className="text-white font-bold text-lg">{enrolledCourseIds.length}</p>
               </div>
               <div>
-                <p className="text-zinc-500 text-[9px] uppercase tracking-wider mb-1">PATH_PROGRESS</p>
+                <p className="text-zinc-500 text-[9px] uppercase tracking-wider mb-1">Path Progress</p>
                 <p className="text-red-400 font-bold text-lg">{overallProgress}%</p>
               </div>
               <div>
-                <p className="text-zinc-500 text-[9px] uppercase tracking-wider mb-1">CERTIFICATES</p>
+                <p className="text-zinc-500 text-[9px] uppercase tracking-wider mb-1">Certificates</p>
                 <p className="text-zinc-500 font-bold text-lg">0</p>
               </div>
             </div>
@@ -151,9 +151,9 @@ export default function DashboardPage() {
               
               {/* Enrolled Courses Section */}
               <div className="space-y-4">
-                <h2 className="text-xs font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                <h2 className="text-xs text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                   <Play className="h-3 w-3 text-red-500 fill-red-500/20" />
-                  CONTINUE_LEARNING
+                  Continue Learning
                 </h2>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -182,19 +182,19 @@ export default function DashboardPage() {
                               <span className="inline-flex items-center rounded-full bg-red-500/5 px-2.5 py-0.5 text-[8px] font-mono text-red-400 border border-red-500/10 uppercase">
                                 {course.level}
                               </span>
-                              <span className="text-[10px] font-mono text-zinc-500">
-                                {completedCount} / {totalLessons} LESSONS
+                              <span className="text-[10px] text-zinc-500">
+                                {completedCount} / {totalLessons} lessons
                               </span>
                             </div>
-                            <h3 className="text-sm font-bold text-white font-mono line-clamp-1">
+                            <h3 className="text-sm font-bold text-white line-clamp-1">
                               {course.title}
                             </h3>
                           </div>
 
                           {/* Progress slider bar */}
                           <div className="mt-4 space-y-1.5">
-                            <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                              <span>PROGRESS</span>
+                            <div className="flex items-center justify-between text-[10px] text-zinc-500">
+                              <span>Progress</span>
                               <span className="text-white">{progress?.progressPercentage || 0}%</span>
                             </div>
                             <div className="h-1.5 w-full rounded-full bg-zinc-900 border border-white/5 overflow-hidden">
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                           {/* Resume Button */}
                           <Link
                             href={`/lesson/${resumeLessonId}`}
-                            className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-lg border border-red-500 bg-red-500/10 hover:bg-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.25)] py-2 text-center text-xs font-mono text-white transition-all uppercase"
+                            className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-lg border border-red-500/50 bg-red-500/10 hover:bg-red-500/20 py-2 text-center text-xs text-white transition-all"
                           >
                             <Play className="h-3 w-3 fill-white" />
                             <span>Resume Lesson</span>
@@ -224,9 +224,9 @@ export default function DashboardPage() {
 
               {/* Available Courses to Enroll in */}
               <div className="space-y-4">
-                <h2 className="text-xs font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                <h2 className="text-xs text-zinc-500 uppercase tracking-widest flex items-center gap-2">
                   <Plus className="h-3.5 w-3.5 text-zinc-500" />
-                  AVAILABLE_COURSES_TO_ENROLL
+                  Available Courses
                 </h2>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -248,10 +248,10 @@ export default function DashboardPage() {
                               </span>
                               <span className="text-[10px] font-mono text-zinc-500">{course.duration}</span>
                             </div>
-                            <h3 className="text-sm font-bold text-white font-mono line-clamp-1">
+                            <h3 className="text-sm font-bold text-white line-clamp-1">
                               {course.title}
                             </h3>
-                            <p className="text-xs leading-normal text-zinc-400 line-clamp-3 font-sans">
+                            <p className="text-xs leading-normal text-zinc-400 line-clamp-3">
                               {course.description}
                             </p>
                           </div>
@@ -259,7 +259,7 @@ export default function DashboardPage() {
                           {/* Enroll CTA */}
                           <button
                             onClick={() => handleEnroll(course.id, course.title)}
-                            className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-[#0e0e11] hover:bg-white/5 py-2 text-center text-xs font-mono text-zinc-300 hover:text-white transition-all uppercase cursor-pointer"
+                            className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-[#0e0e11] hover:bg-white/5 py-2 text-center text-xs text-zinc-300 hover:text-white transition-all cursor-pointer"
                           >
                             <Plus className="h-3 w-3" />
                             <span>Enroll in Course</span>
@@ -267,8 +267,8 @@ export default function DashboardPage() {
                         </motion.div>
                       ))
                     ) : (
-                      <div className="col-span-2 rounded-xl border border-dashed border-white/5 p-8 text-center text-xs font-mono text-zinc-500">
-                        CONGRATULATIONS! YOU_HAVE_ENROLLED_IN_ALL_COURSES
+                      <div className="col-span-2 rounded-xl border border-dashed border-white/5 p-8 text-center text-xs text-zinc-500">
+                        Congratulations! You've enrolled in all courses.
                       </div>
                     )}
                   </AnimatePresence>
@@ -280,35 +280,34 @@ export default function DashboardPage() {
             {/* Right Side: Telemetry logs / Info sidebar (Col Span 4) */}
             <div className="lg:col-span-4 space-y-6">
               
-              {/* Cohort Terminal Details */}
-              <div className="rounded-xl border border-white/5 bg-[#060608] p-4 font-mono text-xs space-y-3">
-                <div className="text-zinc-500 font-bold border-b border-white/5 pb-2 flex items-center gap-2">
-                  <Terminal className="h-3.5 w-3.5 text-red-500" />
-                  <span>SESSION_INFO: TELEMETRY</span>
+              {/* Cohort Details */}
+              <div className="rounded-xl border border-white/5 bg-[#060608] p-4 text-xs space-y-3">
+                <div className="text-zinc-500 font-medium border-b border-white/5 pb-2">
+                  Session Info
                 </div>
                 <div className="space-y-1.5 text-[10px]">
-                  <p><span className="text-zinc-500">COHORT_ID:</span> <span className="text-white">2026-BETA</span></p>
-                  <p><span className="text-zinc-500">HOST_ADDRESS:</span> <span className="text-white">192.168.42.100</span></p>
-                  <p><span className="text-zinc-500">DNS_SERVER:</span> <span className="text-red-400">omnikon.academy.internal</span></p>
-                  <p><span className="text-zinc-500">PORT:</span> <span className="text-white">3000</span></p>
-                  <p><span className="text-zinc-500">COMPILER:</span> <span className="text-white">TypeScript 5.x</span></p>
+                  <p><span className="text-zinc-500">Cohort ID:</span> <span className="text-white">2026-BETA</span></p>
+                  <p><span className="text-zinc-500">Host Address:</span> <span className="text-white">192.168.42.100</span></p>
+                  <p><span className="text-zinc-500">DNS Server:</span> <span className="text-zinc-400">omnikon.academy.internal</span></p>
+                  <p><span className="text-zinc-500">Port:</span> <span className="text-white">3000</span></p>
+                  <p><span className="text-zinc-500">Compiler:</span> <span className="text-white">TypeScript 5.x</span></p>
                 </div>
               </div>
 
               {/* Path Progress Card */}
               <div className="rounded-xl border border-white/5 bg-[#060608] p-5 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-mono text-white font-bold">
+                <div className="flex items-center gap-2 text-xs text-white font-medium">
                   <Award className="h-4 w-4 text-red-500" />
-                  <span>ACTIVE_PATH_OBJECTIVE</span>
+                  <span>Active Path Objective</span>
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white font-mono">Frontend Development</h4>
+                  <h4 className="text-sm font-bold text-white">Frontend Development</h4>
                   <p className="text-[11px] text-zinc-500">Average completion progress across path modules.</p>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between font-mono text-[10px]">
-                    <span className="text-zinc-500">PATH_COMPLETION:</span>
-                    <span className="text-red-400 font-bold">{overallProgress}%</span>
+                  <div className="flex justify-between text-[10px]">
+                    <span className="text-zinc-500">Path Completion:</span>
+                    <span className="text-red-400 font-medium">{overallProgress}%</span>
                   </div>
                   <div className="h-2 w-full rounded-full bg-zinc-900 border border-white/5 overflow-hidden">
                     <motion.div
@@ -321,10 +320,10 @@ export default function DashboardPage() {
               </div>
 
               {/* Recent Student Achievements widget */}
-              <div className="rounded-xl border border-white/5 bg-[#060608] p-5 space-y-4 font-mono text-xs">
-                <div className="flex items-center gap-2 text-zinc-500 font-bold border-b border-white/5 pb-2">
-                  <Activity className="h-3.5 w-3.5 text-red-500" />
-                  <span>SYSTEM_MESSAGES</span>
+              <div className="rounded-xl border border-white/5 bg-[#060608] p-5 space-y-4 text-xs">
+                <div className="flex items-center gap-2 text-zinc-500 font-medium border-b border-white/5 pb-2">
+                  <Activity className="h-3.5 w-3.5 text-zinc-500" />
+                  <span>System Messages</span>
                 </div>
                 <div className="space-y-3 text-[10px] leading-relaxed">
                   <div className="border-l-2 border-red-500/30 pl-2">

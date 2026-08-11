@@ -72,7 +72,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     <div className="border-b border-white/5 py-4 last:border-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between text-left font-mono text-sm font-semibold text-zinc-200 hover:text-white transition-colors"
+        className="flex w-full items-center justify-between text-left text-sm font-semibold text-zinc-200 hover:text-white transition-colors"
       >
         <span>{question}</span>
         <ChevronDown className={`h-4 w-4 text-zinc-500 transition-transform duration-300 ${isOpen ? "rotate-180 text-red-500" : ""}`} />
@@ -102,7 +102,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-300 selection:bg-red-500 selection:text-white relative">
+    <div className="min-h-screen text-zinc-300 selection:bg-red-500 selection:text-white relative">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
       
@@ -114,16 +114,16 @@ export default function LandingPage() {
           
           {/* Hero Left Content */}
           <div className="lg:col-span-7 space-y-8">
-            {/* Terminal Command Line Accent */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-xs text-red-400">
-              <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-              <span>&gt; Building Omnikon OS...</span>
+            {/* Hero Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+              <span>Building Omnikon OS</span>
             </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl space-y-2">
               <span className="block">Open Source.</span>
-              <span className="block bg-gradient-to-r from-red-500 to-red-800 bg-clip-text text-transparent">
+              <span className="block text-zinc-400">
                 Community Driven.
               </span>
               <span className="block">Student Powered.</span>
@@ -137,39 +137,38 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/courses"
-                className="glow-btn-red rounded-lg px-6 py-3 font-mono text-xs font-bold text-white uppercase"
+                className="glow-btn-red rounded-lg px-6 py-3 text-sm font-medium text-white"
               >
                 Explore Projects
               </Link>
               <Link
                 href="/dashboard"
-                className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-6 py-3 font-mono text-xs font-bold text-zinc-300 hover:text-white transition-all uppercase"
+                className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-6 py-3 text-sm font-medium text-zinc-300 hover:text-white transition-all"
               >
                 Join Community
               </Link>
             </div>
 
-            {/* Highlights Console Box */}
-            <div className="max-w-md rounded-xl border border-white/5 bg-[#08080a] p-4 font-mono text-xs space-y-2.5">
-              <div className="text-zinc-500 font-bold border-b border-white/5 pb-2 flex items-center gap-2">
-                <Terminal className="h-3 w-3 text-red-500" />
-                <span>OMNIKON HIGHLIGHTS</span>
+            {/* Highlights Box */}
+            <div className="max-w-md rounded-xl border border-white/5 bg-[#08080a] p-4 text-xs space-y-2.5">
+              <div className="text-zinc-500 font-medium border-b border-white/5 pb-2">
+                OMNIKON HIGHLIGHTS
               </div>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-zinc-400">
-                  <span className="text-red-500 font-bold">&gt;</span> AI-Learning Hub
+                  <span className="text-zinc-600">-</span> AI-Learning Hub
                 </li>
                 <li className="flex items-center gap-2 text-zinc-400">
-                  <span className="text-red-500 font-bold">&gt;</span> Real-world impact
+                  <span className="text-zinc-600">-</span> Real-world impact
                 </li>
                 <li className="flex items-center gap-2 text-zinc-400">
-                  <span className="text-red-500 font-bold">&gt;</span> Open contribution
+                  <span className="text-zinc-600">-</span> Open contribution
                 </li>
                 <li className="flex items-center gap-2 text-zinc-400">
-                  <span className="text-red-500 font-bold">&gt;</span> Student-first
+                  <span className="text-zinc-600">-</span> Student-first
                 </li>
                 <li className="flex items-center gap-2 text-zinc-400">
-                  <span className="text-red-500 font-bold">&gt;</span> GitHub-native
+                  <span className="text-zinc-600">-</span> GitHub-native
                 </li>
               </ul>
             </div>
@@ -268,7 +267,7 @@ export default function LandingPage() {
       {/* Stats Counter Section */}
       <section className="relative z-10 border-y border-white/5 bg-[#060608]/60 py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-y-8 gap-x-4 md:grid-cols-4 text-center font-mono">
+          <div className="grid grid-cols-2 gap-y-8 gap-x-4 md:grid-cols-4 text-center">
             <div>
               <p className="text-zinc-500 text-xs tracking-wider uppercase mb-1">Students Trained</p>
               <Counter value={45000} suffix="+" />
@@ -292,7 +291,7 @@ export default function LandingPage() {
       {/* Bento Grid Feature Section */}
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; WHY OMNIKON ACADEMY</h2>
+          <h2 className="text-xs text-red-500/80 uppercase tracking-widest">WHY OMNIKON ACADEMY</h2>
           <p className="text-3xl font-extrabold text-white">Engineered for Devs, Not Corporations.</p>
         </div>
 
@@ -304,7 +303,7 @@ export default function LandingPage() {
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
                 <Terminal className="h-4 w-4" />
               </span>
-              <h3 className="text-lg font-bold text-white font-mono">Interactive Playrooms</h3>
+              <h3 className="text-lg font-bold text-white">Interactive Playrooms</h3>
               <p className="text-sm text-zinc-400 max-w-md">
                 Learn syntax and architectures in real-time. Write backend API modules, protobuf declarations, and Docker configs inside mock browser terminals.
               </p>
@@ -331,7 +330,7 @@ export default function LandingPage() {
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
                 <GitBranch className="h-4 w-4" />
               </span>
-              <h3 className="text-lg font-bold text-white font-mono">GitHub Native Flow</h3>
+              <h3 className="text-lg font-bold text-white">GitHub Native Flow</h3>
               <p className="text-sm text-zinc-400">
                 No artificial quiz templates. Progress by reading diffs, fixing edge-cases, and triggering mock workflow test runs.
               </p>
@@ -357,7 +356,7 @@ export default function LandingPage() {
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
                 <Activity className="h-4 w-4" />
               </span>
-              <h3 className="text-lg font-bold text-white font-mono">Live Logs Feed</h3>
+              <h3 className="text-lg font-bold text-white">Live Logs Feed</h3>
               <p className="text-sm text-zinc-400">
                 Stay motivated by watching real-time activities, merges, and achievements happening across our virtual cohort.
               </p>
@@ -381,7 +380,7 @@ export default function LandingPage() {
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
                 <Star className="h-4 w-4" />
               </span>
-              <h3 className="text-lg font-bold text-white font-mono">Build Real Open Source</h3>
+              <h3 className="text-lg font-bold text-white">Build Real Open Source</h3>
               <p className="text-sm text-zinc-400 max-w-md">
                 Every cohort builds, tests, and deploys utilities that are released under permissive MIT licenses on GitHub. Work on active project backlogs.
               </p>
@@ -411,7 +410,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           <div className="text-center space-y-4 mb-16">
-            <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; CURRICULUM_TRACKS</h2>
+            <h2 className="text-xs text-red-500/80 uppercase tracking-widest">CURRICULUM TRACKS</h2>
             <p className="text-3xl font-extrabold text-white">Structured Career Learning Paths</p>
             <p className="text-sm text-zinc-400 max-w-lg mx-auto">
               Skip the tutorial hell. Our curated paths contain consecutive projects and lessons to transform you from beginner to systems developer.
@@ -432,7 +431,7 @@ export default function LandingPage() {
                     {path.level}
                   </span>
                   <div>
-                    <h3 className="text-md font-bold text-white font-mono group-hover:text-red-400 transition-colors">
+                    <h3 className="text-md font-bold text-white group-hover:text-red-400 transition-colors">
                       {path.title}
                     </h3>
                     <p className="mt-2 text-xs leading-relaxed text-zinc-400">
@@ -448,9 +447,9 @@ export default function LandingPage() {
                   </div>
                   <Link
                     href="/courses"
-                    className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-[#0e0e11] group-hover:bg-red-500/10 group-hover:border-red-500/30 py-2.5 text-center text-xs font-mono text-zinc-300 group-hover:text-white transition-all"
+                    className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-[#0e0e11] group-hover:bg-red-500/10 group-hover:border-red-500/30 py-2.5 text-center text-xs text-zinc-300 group-hover:text-white transition-all"
                   >
-                    <span>ACTIVATE_PATH</span>
+                    <span>Explore Path</span>
                     <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
@@ -468,7 +467,7 @@ export default function LandingPage() {
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div className="space-y-4">
-            <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; ACTIVE_COHORT_COURSES</h2>
+            <h2 className="text-xs text-red-500/80 uppercase tracking-widest">ACTIVE COHORT COURSES</h2>
             <p className="text-3xl font-extrabold text-white">Popular Programs</p>
             <p className="text-sm text-zinc-400 max-w-md">
               Learn advanced architectures directly from production codebases. Interactive, modular, and deep.
@@ -476,9 +475,9 @@ export default function LandingPage() {
           </div>
           <Link
             href="/courses"
-            className="flex items-center gap-1.5 font-mono text-xs text-red-400 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs text-red-400/80 hover:text-white transition-colors"
           >
-            <span>[ VIEW_ALL_COURSES ]</span>
+            <span>View All Courses</span>
             <ArrowRight className="h-3 w-3" />
           </Link>
         </div>
@@ -500,7 +499,7 @@ export default function LandingPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="text-md font-bold text-white font-mono hover:text-red-400 transition-colors">
+                    <h3 className="text-md font-bold text-white hover:text-red-400 transition-colors">
                       {course.title}
                     </h3>
                     <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
@@ -524,7 +523,7 @@ export default function LandingPage() {
                   </div>
                   <Link
                     href={`/lesson/${firstLessonId}`}
-                    className="glow-btn-red rounded-lg px-4 py-2 font-mono text-[10px] font-bold text-white uppercase"
+                    className="glow-btn-red rounded-lg px-4 py-2 text-[10px] font-medium text-white"
                   >
                     Start Course
                   </Link>
@@ -543,8 +542,8 @@ export default function LandingPage() {
             {/* Left side: Live log feed */}
             <div className="lg:col-span-6 space-y-6">
               <div className="space-y-3">
-                <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; LIVE_ACTIVITY_STREAM</h2>
-                <h3 className="text-2xl font-bold text-white font-mono">Telemetry Network</h3>
+                <h2 className="text-xs text-red-500/80 uppercase tracking-widest">LIVE ACTIVITY STREAM</h2>
+                <h3 className="text-2xl font-bold text-white">Telemetry Network</h3>
                 <p className="text-sm text-zinc-400">
                   Watch as students check off modules, commit index patches, and merge exercises across our platform. Join the hive mind.
                 </p>
@@ -555,8 +554,8 @@ export default function LandingPage() {
             {/* Right side: Testimonials */}
             <div className="lg:col-span-6 space-y-6">
               <div className="space-y-3">
-                <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; STUDENT_REVIEWS</h2>
-                <h3 className="text-2xl font-bold text-white font-mono">Terminal feedback</h3>
+                <h2 className="text-xs text-red-500/80 uppercase tracking-widest">STUDENT REVIEWS</h2>
+                <h3 className="text-2xl font-bold text-white">Terminal feedback</h3>
                 <p className="text-sm text-zinc-400">
                   Hear from software engineers who scaled their learning and skipped the bootcamp debt.
                 </p>
@@ -593,22 +592,22 @@ export default function LandingPage() {
       {/* Pricing Section */}
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; PRICING_PLANS</h2>
+          <h2 className="text-xs text-red-500/80 uppercase tracking-widest">PRICING PLANS</h2>
           <p className="text-3xl font-extrabold text-white">Unlock Senior-Level Content</p>
           
           {/* Billing Switch */}
-          <div className="inline-flex items-center rounded-lg border border-white/10 bg-[#09090b] p-1 font-mono text-xs mt-4">
+          <div className="inline-flex items-center rounded-lg border border-white/10 bg-[#09090b] p-1 text-xs mt-4">
             <button
               onClick={() => setActivePricingTab("monthly")}
               className={`rounded-md px-3.5 py-1.5 transition-colors ${activePricingTab === "monthly" ? "bg-red-500 text-white" : "text-zinc-400 hover:text-white"}`}
             >
-              MONTHLY
+              Monthly
             </button>
             <button
               onClick={() => setActivePricingTab("annual")}
               className={`rounded-md px-3.5 py-1.5 transition-colors ${activePricingTab === "annual" ? "bg-red-500 text-white" : "text-zinc-400 hover:text-white"}`}
             >
-              ANNUAL_PRO
+              Annual
             </button>
           </div>
         </div>
@@ -618,13 +617,13 @@ export default function LandingPage() {
           {/* Plan 1: Free Dev */}
           <div className="rounded-2xl border border-white/5 bg-[#070709] p-8 flex flex-col justify-between relative overflow-hidden">
             <div className="space-y-6">
-              <span className="font-mono text-xs text-zinc-500">INIT // BASE_TIER</span>
+              <span className="text-xs text-zinc-500">INIT // BASE_TIER</span>
               <div>
-                <h3 className="text-2xl font-extrabold text-white font-mono">Free Developer</h3>
+                <h3 className="text-2xl font-extrabold text-white">Free Developer</h3>
                 <p className="text-sm text-zinc-400 mt-1">Access core foundations. Learn tools.</p>
               </div>
-              <div className="text-3xl font-extrabold text-white font-mono">$0</div>
-              <ul className="space-y-3 text-xs text-zinc-400 font-mono">
+              <div className="text-3xl font-extrabold text-white">$0</div>
+              <ul className="space-y-3 text-xs text-zinc-400">
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-500" />
                   <span>Access to Beginner courses</span>
@@ -641,7 +640,7 @@ export default function LandingPage() {
             </div>
             <Link
               href="/dashboard"
-              className="mt-8 block w-full rounded-lg border border-white/10 bg-[#0e0e11] hover:bg-white/5 py-3 text-center font-mono text-xs text-zinc-300 font-bold uppercase"
+              className="mt-8 block w-full rounded-lg border border-white/10 bg-[#0e0e11] hover:bg-white/5 py-3 text-center text-xs text-zinc-300 font-medium"
             >
               Start Free Coding
             </Link>
@@ -653,21 +652,21 @@ export default function LandingPage() {
               RECOMMENDED
             </div>
             <div className="space-y-6">
-              <span className="font-mono text-xs text-red-400 font-bold">MUTATION // SENIOR_TIER</span>
+              <span className="text-xs text-red-400/80 font-medium">MUTATION // SENIOR_TIER</span>
               <div>
-                <h3 className="text-2xl font-extrabold text-white font-mono">Pro Membership</h3>
+                <h3 className="text-2xl font-extrabold text-white">Pro Membership</h3>
                 <p className="text-sm text-zinc-400 mt-1">Full curriculum path. Build live specs.</p>
               </div>
-              <div className="font-mono">
+              <div>
                 <span className="text-3xl font-extrabold text-white">
                   {activePricingTab === "monthly" ? "$29" : "$20"}
                 </span>
                 <span className="text-xs text-zinc-500"> / month</span>
                 {activePricingTab === "annual" && (
-                  <p className="text-[10px] text-red-400 mt-1">Billed annually ($240)</p>
+                  <p className="text-[10px] text-red-400/80 mt-1">Billed annually ($240)</p>
                 )}
               </div>
-              <ul className="space-y-3 text-xs text-zinc-400 font-mono">
+              <ul className="space-y-3 text-xs text-zinc-400">
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-red-500" />
                   <span className="text-white">All courses (Intermediate & Advanced)</span>
@@ -688,7 +687,7 @@ export default function LandingPage() {
             </div>
             <Link
               href="/dashboard"
-              className="mt-8 block w-full rounded-lg glow-btn-red py-3 text-center font-mono text-xs text-white font-bold uppercase"
+              className="mt-8 block w-full rounded-lg glow-btn-red py-3 text-center text-xs text-white font-medium"
             >
               Unlock Pro Access
             </Link>
@@ -700,7 +699,7 @@ export default function LandingPage() {
       {/* FAQ Section */}
       <section className="relative z-10 mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8 border-t border-white/5">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">&gt; FREQUENTLY_ASKED_QUESTIONS</h2>
+          <h2 className="text-xs text-red-500/80 uppercase tracking-widest">FREQUENTLY ASKED QUESTIONS</h2>
           <p className="text-3xl font-extrabold text-white">System Architecture & Support</p>
         </div>
 
@@ -737,9 +736,9 @@ export default function LandingPage() {
           <div className="flex justify-center">
             <Link
               href="/dashboard"
-              className="glow-btn-red rounded-lg px-8 py-3.5 font-mono text-xs font-bold text-white uppercase"
+              className="glow-btn-red rounded-lg px-8 py-3.5 text-sm font-medium text-white"
             >
-              [ START_LEARNING_NOW ]
+              Start Learning Now
             </Link>
           </div>
         </div>

@@ -42,7 +42,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
 
@@ -53,10 +53,10 @@ export default function CoursesPage() {
           
           {/* Header */}
           <div className="space-y-4 mb-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[10px] text-red-400">
-              <span>&gt; REPOSITORY_INDEX</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] text-zinc-400">
+              <span>Repository Index</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-white font-mono tracking-tight sm:text-4xl">
+            <h1 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
               Browse Systems Courses
             </h1>
             <p className="text-zinc-400 max-w-xl text-sm">
@@ -76,8 +76,8 @@ export default function CoursesPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search repository titles, tags, descriptions..."
-                className="w-full rounded-lg border border-white/10 bg-[#0c0c0e] py-2.5 pl-10 pr-4 text-sm text-white focus:border-red-500/50 focus:outline-none focus:ring-1 focus:ring-red-500/50 placeholder-zinc-600 transition-all font-mono"
+                placeholder="Search courses, tags, descriptions..."
+                className="w-full rounded-lg border border-white/10 bg-[#0c0c0e] py-2.5 pl-10 pr-4 text-sm text-white focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 placeholder-zinc-600 transition-all"
               />
             </div>
 
@@ -86,17 +86,17 @@ export default function CoursesPage() {
               
               {/* Left filters: Level selectors */}
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-mono text-zinc-500 mr-1 flex items-center gap-1.5">
+                <span className="text-xs text-zinc-500 mr-1 flex items-center gap-1.5">
                   <SlidersHorizontal className="h-3 w-3" />
-                  LEVEL:
+                  Level:
                 </span>
                 {["All", "Beginner", "Intermediate", "Advanced"].map((lvl) => (
                   <button
                     key={lvl}
                     onClick={() => setSelectedLevel(lvl)}
-                    className={`rounded px-2.5 py-1 text-[11px] font-mono transition-colors ${selectedLevel === lvl ? "bg-red-500 text-white font-bold" : "bg-[#0f0f12] text-zinc-400 border border-white/5 hover:text-white"}`}
+                    className={`rounded px-2.5 py-1 text-[11px] transition-colors ${selectedLevel === lvl ? "bg-red-500 text-white font-medium" : "bg-[#0f0f12] text-zinc-400 border border-white/5 hover:text-white"}`}
                   >
-                    {lvl.toUpperCase()}
+                    {lvl}
                   </button>
                 ))}
               </div>
@@ -105,10 +105,10 @@ export default function CoursesPage() {
               {(searchQuery || selectedLevel !== "All" || selectedTag !== "All") && (
                 <button
                   onClick={resetFilters}
-                  className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 font-mono self-start sm:self-auto cursor-pointer"
+                  className="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-white self-start sm:self-auto cursor-pointer"
                 >
                   <RotateCcw className="h-3 w-3" />
-                  <span>RESET_FILTERS</span>
+                  <span>Reset Filters</span>
                 </button>
               )}
 
@@ -116,14 +116,14 @@ export default function CoursesPage() {
 
             {/* Tag Selection list */}
             <div className="flex flex-wrap gap-1.5 pt-2">
-              <span className="text-xs font-mono text-zinc-500 mr-2 self-center">TAGS:</span>
+              <span className="text-xs text-zinc-500 mr-2 self-center">Tags:</span>
               {allTags.map((tag) => (
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag)}
-                  className={`rounded-md px-2 py-0.5 text-[10px] font-mono border transition-all ${selectedTag === tag ? "border-red-500 bg-red-500/10 text-red-400 font-bold" : "border-white/5 bg-[#08080a] text-zinc-500 hover:text-zinc-300"}`}
+                  className={`rounded-md px-2 py-0.5 text-[10px] border transition-all ${selectedTag === tag ? "border-red-500/30 bg-red-500/5 text-red-400 font-medium" : "border-white/5 bg-[#08080a] text-zinc-500 hover:text-zinc-300"}`}
                 >
-                  {tag === "All" ? "ALL_TAGS" : `#${tag}`}
+                  {tag === "All" ? "All" : `#${tag}`}
                 </button>
               ))}
             </div>
@@ -161,7 +161,7 @@ export default function CoursesPage() {
                           </div>
 
                           <div className="space-y-2">
-                            <h2 className="text-lg font-bold text-white font-mono hover:text-red-400 transition-colors line-clamp-1">
+                            <h2 className="text-lg font-bold text-white hover:text-red-400 transition-colors line-clamp-1">
                               {course.title}
                             </h2>
                             <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
@@ -195,9 +195,9 @@ export default function CoursesPage() {
                           
                           <Link
                             href={`/lesson/${firstLessonId}`}
-                            className="glow-btn-red rounded-lg px-4 py-2 font-mono text-[10px] font-bold text-white uppercase"
+                            className="glow-btn-red rounded-lg px-4 py-2 text-[10px] font-medium text-white"
                           >
-                            [ START_COURSE ]
+                            Start Course
                           </Link>
                         </div>
                       </motion.div>
@@ -210,14 +210,14 @@ export default function CoursesPage() {
                   animate={{ opacity: 1 }}
                   className="rounded-xl border border-dashed border-white/10 bg-[#060608]/40 p-12 text-center max-w-md mx-auto"
                 >
-                  <p className="text-sm font-mono text-zinc-500 mb-4">
-                    NO_RESULTS_FOUND_FOR_QUERY: "{searchQuery}"
+                  <p className="text-sm text-zinc-500 mb-4">
+                    No results found for "{searchQuery}"
                   </p>
                   <button
                     onClick={resetFilters}
-                    className="glow-btn-red rounded px-4 py-2 font-mono text-xs text-white"
+                    className="glow-btn-red rounded px-4 py-2 text-xs text-white"
                   >
-                    Clear Search Query
+                    Clear Search
                   </button>
                 </motion.div>
               )}

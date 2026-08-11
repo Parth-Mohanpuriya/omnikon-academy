@@ -86,9 +86,9 @@ export default function LessonPlayerPage({ params }: PageProps) {
 
   if (!courseDetails || !course || !currentLesson || !currentModule) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-[#030303] text-zinc-400 font-mono p-4">
-        <p className="text-xs text-red-500 mb-2">&gt; ERROR: LESSON_NOT_FOUND</p>
-        <p className="text-sm mb-6 text-zinc-500">The lesson code "{currentLessonId}" is not registered in the system.</p>
+      <div className="flex h-screen flex-col items-center justify-center text-zinc-400 p-4">
+        <p className="text-xs text-zinc-500 mb-2">Lesson not found</p>
+        <p className="text-sm mb-6 text-zinc-500">The lesson "{currentLessonId}" is not registered in the system.</p>
         <Link
           href="/dashboard"
           className="glow-btn-red rounded-lg px-4 py-2 text-xs text-white"
@@ -122,39 +122,39 @@ export default function LessonPlayerPage({ params }: PageProps) {
   );
 
   return (
-    <div className="flex h-screen flex-col bg-[#030303] text-zinc-300 selection:bg-red-500 selection:text-white overflow-hidden">
+    <div className="flex h-screen flex-col text-zinc-300 selection:bg-red-500 selection:text-white overflow-hidden">
       
       {/* Custom Top Classroom Bar */}
       <header className="flex h-14 items-center justify-between border-b border-white/5 bg-[#060608]/90 px-4 z-20">
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 font-mono text-xs text-zinc-500 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">[ BACK_TO_DASHBOARD ]</span>
+            <span className="hidden sm:inline">Back to Dashboard</span>
           </Link>
           <span className="text-zinc-700 font-mono text-sm hidden md:inline">|</span>
           <div className="hidden md:flex items-center gap-2">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-red-500/10 border border-red-500/20 text-red-500">
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-white/5 border border-white/10 text-zinc-400">
               <Laptop className="h-3 w-3" />
             </span>
-            <span className="font-mono text-xs text-zinc-300 font-bold max-w-[280px] truncate">
+            <span className="text-xs text-zinc-300 font-medium max-w-[280px] truncate">
               {course.title}
             </span>
           </div>
         </div>
 
         {/* Mid-top progress stats */}
-        <div className="flex items-center gap-3 font-mono text-[10px]">
-          <span className="text-zinc-500">PROGRESS:</span>
+        <div className="flex items-center gap-3 text-[10px]">
+          <span className="text-zinc-500">Progress:</span>
           <div className="h-2 w-28 rounded-full bg-zinc-900 border border-white/5 overflow-hidden hidden sm:block">
             <div
               className="h-full bg-red-500 rounded-full transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <span className="text-red-400 font-bold">{progressPercent}%</span>
+          <span className="text-red-400 font-medium">{progressPercent}%</span>
         </div>
 
         {/* Toggle Sidebar Button */}
@@ -188,26 +188,26 @@ export default function LessonPlayerPage({ params }: PageProps) {
             <button
               onClick={() => prevLesson && router.push(`/lesson/${prevLesson.id}`)}
               disabled={!prevLesson}
-              className={`inline-flex items-center gap-1 rounded-lg border border-white/5 bg-[#09090b] px-3.5 py-2 font-mono text-xs font-bold transition-all ${prevLesson ? "text-zinc-300 hover:text-white hover:border-white/20 active:scale-[0.98]" : "text-zinc-700 cursor-not-allowed"}`}
+              className={`inline-flex items-center gap-1 rounded-lg border border-white/5 bg-[#09090b] px-3.5 py-2 text-xs font-medium transition-all ${prevLesson ? "text-zinc-300 hover:text-white hover:border-white/20 active:scale-[0.98]" : "text-zinc-700 cursor-not-allowed"}`}
             >
               <ChevronLeft className="h-4 w-4" />
-              <span>PREV_LESSON</span>
+              <span>Previous</span>
             </button>
 
             {/* Completion Toggle */}
             <button
               onClick={handleToggleComplete}
-              className={`glow-btn px-5 py-2 rounded-lg font-mono text-xs font-bold transition-all cursor-pointer ${isCurrentCompleted ? "bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500/20" : "bg-red-500 border border-red-500 text-white hover:bg-red-400"}`}
+              className={`glow-btn px-5 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${isCurrentCompleted ? "bg-emerald-500/10 border border-emerald-500 text-emerald-400 hover:bg-emerald-500/20" : "bg-red-500 border border-red-500 text-white hover:bg-red-400"}`}
             >
-              {isCurrentCompleted ? "[ ✓_COMPLETE ]" : "[ MARK_COMPLETE ]"}
+              {isCurrentCompleted ? "Complete" : "Mark Complete"}
             </button>
 
             <button
               onClick={() => nextLesson && router.push(`/lesson/${nextLesson.id}`)}
               disabled={!nextLesson}
-              className={`inline-flex items-center gap-1 rounded-lg border border-white/5 bg-[#09090b] px-3.5 py-2 font-mono text-xs font-bold transition-all ${nextLesson ? "text-zinc-300 hover:text-white hover:border-white/20 active:scale-[0.98]" : "text-zinc-700 cursor-not-allowed"}`}
+              className={`inline-flex items-center gap-1 rounded-lg border border-white/5 bg-[#09090b] px-3.5 py-2 text-xs font-medium transition-all ${nextLesson ? "text-zinc-300 hover:text-white hover:border-white/20 active:scale-[0.98]" : "text-zinc-700 cursor-not-allowed"}`}
             >
-              <span>NEXT_LESSON</span>
+              <span>Next</span>
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
@@ -215,10 +215,10 @@ export default function LessonPlayerPage({ params }: PageProps) {
           {/* Lesson Metadata details */}
           <div className="space-y-4 max-w-4xl">
             <div className="space-y-1">
-              <span className="font-mono text-[10px] text-zinc-500">
+              <span className="text-[10px] text-zinc-500">
                 MODULE: {currentModule.title.toUpperCase()}
               </span>
-              <h2 className="text-xl font-bold text-white font-mono">
+              <h2 className="text-xl font-bold text-white">
                 {currentLesson.title}
               </h2>
             </div>
@@ -227,23 +227,22 @@ export default function LessonPlayerPage({ params }: PageProps) {
             </p>
 
             {/* Simulated Resource block */}
-            <div className="rounded-xl border border-white/5 bg-[#060608] p-4 font-mono text-xs space-y-2.5 mt-8">
-              <div className="text-zinc-400 font-bold border-b border-white/5 pb-2 flex items-center gap-2">
-                <Terminal className="h-3.5 w-3.5 text-red-500" />
-                <span>WORKSPACE_RESOURCES</span>
+            <div className="rounded-xl border border-white/5 bg-[#060608] p-4 text-xs space-y-2.5 mt-8">
+              <div className="text-zinc-400 font-medium border-b border-white/5 pb-2">
+                Workspace Resources
               </div>
               <ul className="space-y-2 text-[10px]">
                 <li className="flex items-center justify-between text-zinc-400 hover:text-white transition-colors cursor-pointer group">
                   <span className="flex items-center gap-1.5">
-                    <span className="text-red-500">&gt;</span> index.tsx (completed code solution)
+                    <span className="text-zinc-600">-</span> index.tsx (completed code solution)
                   </span>
-                  <ArrowUpRight className="h-3 w-3 text-zinc-600 group-hover:text-red-500" />
+                  <ArrowUpRight className="h-3 w-3 text-zinc-600 group-hover:text-zinc-400" />
                 </li>
                 <li className="flex items-center justify-between text-zinc-400 hover:text-white transition-colors cursor-pointer group">
                   <span className="flex items-center gap-1.5">
-                    <span className="text-red-500">&gt;</span> README.md (systems specifications document)
+                    <span className="text-zinc-600">-</span> README.md (systems specifications document)
                   </span>
-                  <ArrowUpRight className="h-3 w-3 text-zinc-600 group-hover:text-red-500" />
+                  <ArrowUpRight className="h-3 w-3 text-zinc-600 group-hover:text-zinc-400" />
                 </li>
               </ul>
             </div>
@@ -260,8 +259,8 @@ export default function LessonPlayerPage({ params }: PageProps) {
               exit={{ width: 0, opacity: 0 }}
               className="h-full border-l border-white/5 bg-[#060608]/90 overflow-y-auto flex-shrink-0 z-10"
             >
-              <div className="p-4 border-b border-white/5 font-mono text-xs font-bold text-zinc-300 tracking-wider">
-                &gt; COURSE_PLAYLIST
+              <div className="p-4 border-b border-white/5 text-xs font-medium text-zinc-300 tracking-wider">
+                Course Playlist
               </div>
 
               <div className="p-4 space-y-6">
@@ -292,8 +291,8 @@ export default function LessonPlayerPage({ params }: PageProps) {
                               <p className={`font-bold line-clamp-2 ${isCurrent ? "text-white" : ""}`}>
                                 {les.title}
                               </p>
-                              <span className="text-[9px] text-zinc-600 font-mono block">
-                                DURATION: {les.duration}
+                              <span className="text-[9px] text-zinc-600 block">
+                                {les.duration}
                               </span>
                             </div>
                           </Link>

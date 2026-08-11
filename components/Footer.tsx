@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Terminal } from "lucide-react";
 import Logo from "@/components/Logo";
 
 export default function Footer() {
@@ -35,7 +34,7 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-mono text-zinc-200 tracking-wider uppercase mb-4">&gt; RESOURCES</h3>
+            <h3 className="text-sm font-medium text-zinc-200 tracking-wider uppercase mb-4">Resources</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/courses" className="text-sm text-zinc-400 hover:text-white transition-colors">
@@ -62,7 +61,7 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h3 className="text-sm font-mono text-zinc-200 tracking-wider uppercase mb-4">&gt; COMMUNITY</h3>
+            <h3 className="text-sm font-medium text-zinc-200 tracking-wider uppercase mb-4">Community</h3>
             <ul className="space-y-2.5">
               <li>
                 <a href="#" className="text-sm text-zinc-400 hover:text-white transition-colors">
@@ -87,30 +86,25 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter / CLI Shell signup */}
+          {/* Newsletter signup */}
           <div className="space-y-4">
-            <h3 className="text-sm font-mono text-zinc-200 tracking-wider uppercase">&gt; SUBSCRIBE</h3>
+            <h3 className="text-sm font-medium text-zinc-200 tracking-wider uppercase">Subscribe</h3>
             <p className="text-sm text-zinc-400">
               Receive updates on new courses, micro-lessons, and hackathons.
             </p>
-            <div className="relative flex flex-col gap-2 p-3 rounded-lg border border-white/5 bg-[#09090b] font-mono text-xs">
-              <div className="flex items-center gap-1.5 text-zinc-500 mb-1">
-                <Terminal className="h-3 w-3" />
-                <span>newsletter.sh</span>
-              </div>
+            <div className="relative flex flex-col gap-2 p-3 rounded-lg border border-white/5 bg-[#09090b] text-xs">
               <div className="flex items-center gap-1">
-                <span className="text-red-500">$</span>
                 <input
                   type="email"
-                  placeholder="enter email..."
+                  placeholder="Enter email..."
                   className="bg-transparent border-none text-white focus:outline-none placeholder-zinc-600 w-full"
                 />
               </div>
               <button
                 type="submit"
-                className="mt-2 text-center text-[10px] uppercase font-bold text-black bg-zinc-200 hover:bg-white rounded py-1.5 transition-colors cursor-pointer"
+                className="mt-2 text-center text-[10px] uppercase font-medium text-black bg-zinc-200 hover:bg-white rounded py-1.5 transition-colors cursor-pointer"
               >
-                Execute Subscribe
+                Subscribe
               </button>
             </div>
           </div>

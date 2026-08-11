@@ -38,7 +38,7 @@ export default function BlogPage() {
   const regularPosts = filteredPosts.filter((p) => !p.featured);
 
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
 
@@ -52,10 +52,10 @@ export default function BlogPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4 mb-10"
           >
-            <div className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[10px] text-red-400">
-              <span>&gt; DEVELOPER_BLOG</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] text-zinc-400">
+              <span>Developer Blog</span>
             </div>
-            <h1 className="text-3xl font-extrabold text-white font-mono tracking-tight sm:text-4xl">
+            <h1 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
               Engineering Insights
             </h1>
             <p className="text-zinc-400 max-w-xl text-sm">
@@ -81,27 +81,27 @@ export default function BlogPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles, topics, tutorials..."
-                className="w-full rounded-lg border border-white/10 bg-[#0c0c0e] py-2.5 pl-10 pr-4 text-sm text-white focus:border-red-500/50 focus:outline-none focus:ring-1 focus:ring-red-500/50 placeholder-zinc-600 transition-all font-mono"
+                className="w-full rounded-lg border border-white/10 bg-[#0c0c0e] py-2.5 pl-10 pr-4 text-sm text-white focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/10 placeholder-zinc-600 transition-all"
               />
             </div>
 
             {/* Tag Filters */}
             <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
-              <span className="text-xs font-mono text-zinc-500 mr-2 self-center flex items-center gap-1.5">
+              <span className="text-xs text-zinc-500 mr-2 self-center flex items-center gap-1.5">
                 <Tag className="h-3 w-3" />
-                TOPICS:
+                Topics:
               </span>
               {allTags.map((tag) => (
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag)}
-                  className={`rounded-md px-2.5 py-1 text-[10px] font-mono border transition-all ${
+                  className={`rounded-md px-2.5 py-1 text-[10px] border transition-all ${
                     selectedTag === tag
-                      ? "border-red-500 bg-red-500/10 text-red-400 font-bold"
+                      ? "border-red-500/30 bg-red-500/5 text-red-400 font-medium"
                       : "border-white/5 bg-[#08080a] text-zinc-500 hover:text-zinc-300"
                   }`}
                 >
-                  {tag === "All" ? "ALL_TOPICS" : tag}
+                  {tag === "All" ? "All" : tag}
                 </button>
               ))}
             </div>
@@ -129,7 +129,7 @@ export default function BlogPage() {
                     </span>
                   </div>
 
-                  <h2 className="text-2xl font-extrabold text-white font-mono mb-3 group-hover:text-red-400 transition-colors">
+                  <h2 className="text-2xl font-extrabold text-white mb-3 group-hover:text-red-400 transition-colors">
                     {featuredPost.title}
                   </h2>
 
@@ -143,8 +143,8 @@ export default function BlogPage() {
                     <span className="font-mono">{featuredPost.publishedAt}</span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 mt-6 text-xs font-mono text-red-400 group-hover:text-white transition-colors">
-                    <span>READ_ARTICLE</span>
+                  <div className="flex items-center gap-1.5 mt-6 text-xs text-zinc-500 group-hover:text-white transition-colors">
+                    <span>Read Article</span>
                     <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>

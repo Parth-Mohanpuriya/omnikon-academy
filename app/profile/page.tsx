@@ -66,7 +66,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
 

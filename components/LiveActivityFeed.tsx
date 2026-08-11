@@ -45,17 +45,17 @@ export default function LiveActivityFeed() {
   };
 
   return (
-    <div className="w-full rounded-xl border border-red-500/10 bg-[#060606] shadow-xl overflow-hidden font-mono">
-      {/* Terminal Title Bar */}
+    <div className="w-full rounded-xl border border-white/5 bg-[#060606] shadow-xl overflow-hidden">
+      {/* Title Bar */}
       <div className="flex items-center justify-between border-b border-white/5 bg-[#0a0a0c] px-4 py-2.5">
         <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4 text-red-500" />
-          <span className="text-xs font-bold text-zinc-300 tracking-wider">SYSTEM_LOGS: LIVE_FEED</span>
+          <ActivityIcon className="h-4 w-4 text-zinc-500" />
+          <span className="text-xs font-medium text-zinc-300 tracking-wider">LIVE FEED</span>
         </div>
         <div className="flex gap-1.5">
           <span className="h-2 w-2 rounded-full bg-zinc-800" />
           <span className="h-2 w-2 rounded-full bg-zinc-800" />
-          <span className="h-2 w-2 rounded-full bg-red-500/80 animate-pulse" />
+          <span className="h-2 w-2 rounded-full bg-emerald-500/80 animate-pulse" />
         </div>
       </div>
 
@@ -72,17 +72,17 @@ export default function LiveActivityFeed() {
               className="flex items-start justify-between gap-3 text-xs leading-relaxed border-b border-white/5 pb-3 last:border-0 last:pb-0 group"
             >
               <div className="flex items-start gap-2.5">
-                <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded bg-white/5 border border-white/10 group-hover:border-red-500/30 transition-colors">
+                <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded bg-white/5 border border-white/10 group-hover:border-white/10 transition-colors">
                   {getIcon(act.type)}
                 </span>
                 <div>
-                  <span className="text-red-400 hover:underline cursor-pointer font-bold mr-1.5">
+                  <span className="text-zinc-300 hover:underline cursor-pointer font-medium mr-1.5">
                     {act.username}
                   </span>
                   <span className="text-zinc-400">
                     {act.action}
                   </span>
-                  <span className="text-white font-bold ml-1.5">
+                  <span className="text-white font-medium ml-1.5">
                     {act.target}
                   </span>
                 </div>

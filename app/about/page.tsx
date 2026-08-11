@@ -75,7 +75,7 @@ const milestones = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
+    <div className="min-h-screen text-zinc-300 relative flex flex-col justify-between selection:bg-red-500 selection:text-white">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
 
@@ -90,13 +90,13 @@ export default function AboutPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center max-w-3xl mx-auto"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/5 px-3 py-1 font-mono text-[10px] text-red-400 mb-6">
-                <span>&gt; ABOUT_OMNIKON</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] text-zinc-400 mb-6">
+                <span>About Omnikon</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-white font-mono mb-6">
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-white mb-6">
                 Building the Future of
-                <span className="block bg-gradient-to-r from-red-500 to-red-800 bg-clip-text text-transparent">
+                <span className="block text-zinc-400">
                   Developer Education
                 </span>
               </h1>
@@ -110,13 +110,13 @@ export default function AboutPage() {
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   href="/courses"
-                  className="glow-btn-red rounded-lg px-6 py-3 font-mono text-xs font-bold text-white uppercase"
+                  className="glow-btn-red rounded-lg px-6 py-3 text-sm font-medium text-white"
                 >
                   Explore Courses
                 </Link>
                 <Link
                   href="/#community"
-                  className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-6 py-3 font-mono text-xs font-bold text-zinc-300 hover:text-white transition-all uppercase"
+                  className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-6 py-3 text-sm font-medium text-zinc-300 hover:text-white transition-all"
                 >
                   Join Community
                 </Link>
@@ -188,10 +188,10 @@ export default function AboutPage() {
                 animate={{ opacity: 1, x: 0 }}
                 className="space-y-6"
               >
-                <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">
-                  &gt; OUR_MISSION
+                <h2 className="text-xs text-red-500/80 uppercase tracking-widest">
+                  OUR MISSION
                 </h2>
-                <h3 className="text-3xl font-extrabold text-white font-mono">
+                <h3 className="text-3xl font-extrabold text-white">
                   Democratizing Developer Education
                 </h3>
                 <p className="text-zinc-400 leading-relaxed">
@@ -228,31 +228,31 @@ export default function AboutPage() {
                 className="relative"
               >
                 <div className="absolute inset-0 bg-red-500/5 rounded-2xl blur-3xl" />
-                <div className="relative rounded-2xl border border-white/5 bg-[#08080a] p-8 space-y-4">
-                  <div className="flex items-center gap-2 text-zinc-500 font-mono text-xs border-b border-white/5 pb-4">
-                    <Lightbulb className="h-4 w-4 text-red-500" />
-                    <span>KEY_PRINCIPLES</span>
+                  <div className="relative rounded-2xl border border-white/5 bg-[#08080a] p-8 space-y-4">
+                    <div className="flex items-center gap-2 text-zinc-500 text-xs border-b border-white/5 pb-4">
+                      <Lightbulb className="h-4 w-4 text-zinc-500" />
+                      <span>KEY PRINCIPLES</span>
+                    </div>
+                    <ul className="space-y-3">
+                      {[
+                        "Learn by building real projects",
+                        "Contribute to open source",
+                        "Peer review and mentorship",
+                        "Production-grade code quality",
+                        "Community-first development"
+                      ].map((principle, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center gap-2 text-sm text-zinc-400"
+                        >
+                          <span className="text-zinc-600 text-xs">
+                            -
+                          </span>
+                          {principle}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul className="space-y-3">
-                    {[
-                      "Learn by building real projects",
-                      "Contribute to open source",
-                      "Peer review and mentorship",
-                      "Production-grade code quality",
-                      "Community-first development"
-                    ].map((principle, index) => (
-                      <li
-                        key={index}
-                        className="flex items-center gap-2 text-sm text-zinc-400"
-                      >
-                        <span className="text-red-500 font-mono text-xs">
-                          &gt;
-                        </span>
-                        {principle}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
               </motion.div>
             </div>
           </section>
@@ -261,8 +261,8 @@ export default function AboutPage() {
           <section className="border-t border-white/5 py-20 bg-[#040406]/30">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="text-center space-y-4 mb-16">
-                <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">
-                  &gt; CORE_VALUES
+                <h2 className="text-xs text-red-500/80 uppercase tracking-widest">
+                  CORE VALUES
                 </h2>
                 <p className="text-3xl font-extrabold text-white">
                   What We Stand For
@@ -281,7 +281,7 @@ export default function AboutPage() {
                     <div className="h-10 w-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500">
                       {value.icon}
                     </div>
-                    <h4 className="text-lg font-bold text-white font-mono">
+                    <h4 className="text-lg font-bold text-white">
                       {value.title}
                     </h4>
                     <p className="text-sm text-zinc-400 leading-relaxed">
@@ -296,8 +296,8 @@ export default function AboutPage() {
           {/* Team Section */}
           <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
             <div className="text-center space-y-4 mb-16">
-              <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">
-                &gt; THE_TEAM
+              <h2 className="text-xs text-red-500/80 uppercase tracking-widest">
+                THE TEAM
               </h2>
               <p className="text-3xl font-extrabold text-white">
                 Meet the Builders
@@ -327,10 +327,10 @@ export default function AboutPage() {
                       </span>
                     </div>
                     <div>
-                      <h4 className="text-lg font-bold text-white font-mono">
+                      <h4 className="text-lg font-bold text-white">
                         {member.name}
                       </h4>
-                      <p className="text-xs text-red-400 font-mono">
+                      <p className="text-xs text-zinc-400">
                         {member.role}
                       </p>
                     </div>
@@ -381,8 +381,8 @@ export default function AboutPage() {
           <section className="border-t border-white/5 py-20 bg-[#040406]/30">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
               <div className="text-center space-y-4 mb-16">
-                <h2 className="text-xs font-mono text-red-500 uppercase tracking-widest">
-                  &gt; OUR_JOURNEY
+                <h2 className="text-xs text-red-500/80 uppercase tracking-widest">
+                  OUR JOURNEY
                 </h2>
                 <p className="text-3xl font-extrabold text-white">Timeline</p>
               </div>
@@ -407,10 +407,10 @@ export default function AboutPage() {
                       )}
                     </div>
                     <div className="pb-8">
-                      <span className="text-xs font-mono text-red-400">
+                      <span className="text-xs text-zinc-500">
                         {milestone.year}
                       </span>
-                      <h4 className="text-lg font-bold text-white font-mono mt-1">
+                      <h4 className="text-lg font-bold text-white mt-1">
                         {milestone.title}
                       </h4>
                       <p className="text-sm text-zinc-400 mt-2 max-w-md">
@@ -436,13 +436,13 @@ export default function AboutPage() {
               <div className="flex justify-center gap-4">
                 <Link
                   href="/courses"
-                  className="glow-btn-red rounded-lg px-8 py-3.5 font-mono text-xs font-bold text-white uppercase"
+                  className="glow-btn-red rounded-lg px-8 py-3.5 text-sm font-medium text-white"
                 >
                   Start Learning
                 </Link>
                 <Link
                   href="/#community"
-                  className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-8 py-3.5 font-mono text-xs font-bold text-zinc-300 hover:text-white transition-all uppercase"
+                  className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-8 py-3.5 text-sm font-medium text-zinc-300 hover:text-white transition-all"
                 >
                   Join Discord
                 </Link>
