@@ -23,7 +23,6 @@ const REVOLUTION_MS = 45_000;
 const ANGULAR_VELOCITY = (2 * Math.PI) / REVOLUTION_MS;
 
 export default function HeroGlobeTags() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const tagsRef = useRef<(HTMLDivElement | null)[]>([]);
   const rafRef = useRef<number>(0);
   const startRef = useRef<number>(0);
@@ -33,12 +32,9 @@ export default function HeroGlobeTags() {
   const [hovered, setHovered] = useState(-1);
 
   const handleMouse = useCallback((e: MouseEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
     mouseRef.current = {
-      x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
-      y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
+      x: (e.clientX / window.innerWidth - 0.5) * 2,
+      y: (e.clientY / window.innerHeight - 0.5) * 2,
     };
   }, []);
 
@@ -47,13 +43,11 @@ export default function HeroGlobeTags() {
   }, []);
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    el.addEventListener("mousemove", handleMouse);
-    el.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mousemove", handleMouse);
+    window.addEventListener("mouseleave", handleMouseLeave);
     return () => {
-      el.removeEventListener("mousemove", handleMouse);
-      el.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("mousemove", handleMouse);
+      window.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [handleMouse, handleMouseLeave]);
 
@@ -73,36 +67,41 @@ export default function HeroGlobeTags() {
         y: sm.y + (m.y - sm.y) * 0.04,
       };
 
-      const container = containerRef.current;
-      if (container) {
-        const cw = container.clientWidth;
-        const ch = container.clientHeight;
-        const isMobile = cw < 640;
-        const isTablet = cw < 1024;
-        const radiusX = isMobile ? cw * 0.32 : isTablet ? cw * 0.30 : cw * 0.34;
-        const radiusY = isMobile ? ch * 0.30 : isTablet ? ch * 0.32 : ch * 0.34;
-        const parallaxX = smoothMouseRef.current.x * 8;
-        const parallaxY = smoothMouseRef.current.y * 8;
-        const centerX = cw / 2 + parallaxX;
-        const centerY = ch / 2 + parallaxY;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-        for (let i = 0; i < TAGS.length; i++) {
-          const tag = tagsRef.current[i];
-          if (!tag) continue;
-          const angle = TAGS[i].initialAngle + (elapsed * ANGULAR_VELOCITY);
-          const x = centerX + Math.cos(angle) * radiusX;
-          const y = centerY + Math.sin(angle) * radiusY;
-          const depth = Math.sin(angle);
-          const norm = (depth + 1) / 2;
-          const scale = 0.88 + norm * 0.12;
-          const opacity = 0.55 + norm * 0.45;
-          const z = Math.round(norm * 10);
-          const isHov = hoveredRef.current === i;
-          const extraScale = isHov ? 1.06 : 1;
-          tag.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale * extraScale})`;
-          tag.style.opacity = String(opacity);
-          tag.style.zIndex = String(z);
-        }
+      // Orbit center: match the actual Vanta globe center
+      // Vanta globe is centered in the full-screen fixed canvas.
+      // On desktop hero, the globe appears roughly 55% from left, 50% from top.
+      const centerX = vw * 0.55 + smoothMouseRef.current.x * 8;
+      const centerY = vh * 0.50 + smoothMouseRef.current.y * 8;
+
+      // Orbit radius: scale with viewport, larger on desktop
+      const baseRadius = Math.min(vw, vh) * 0.22;
+      const radiusX = vw < 640 ? baseRadius * 0.6 : vw < 1024 ? baseRadius * 0.8 : baseRadius;
+      const radiusY = radiusX * 0.85;
+
+      for (let i = 0; i < TAGS.length; i++) {
+        const tag = tagsRef.current[i];
+        if (!tag) continue;
+
+        const angle = TAGS[i].initialAngle + elapsed * ANGULAR_VELOCITY;
+        const x = centerX + Math.cos(angle) * radiusX;
+        const y = centerY + Math.sin(angle) * radiusY;
+
+        // Depth: sin(angle) — positive = front (closer to viewer), negative = back
+        const depth = Math.sin(angle);
+        const norm = (depth + 1) / 2; // 0 = back, 1 = front
+        const scale = 0.88 + norm * 0.12;
+        const opacity = 0.55 + norm * 0.45;
+        const z = Math.round(norm * 10);
+
+        const isHov = hoveredRef.current === i;
+        const extraScale = isHov ? 1.06 : 1;
+
+        tag.style.transform = `translate3d(${x - tag.offsetWidth / 2}px, ${y - tag.offsetHeight / 2}px, 0) scale(${scale * extraScale})`;
+        tag.style.opacity = String(opacity);
+        tag.style.zIndex = String(z);
       }
 
       rafRef.current = requestAnimationFrame(animate);
@@ -113,7 +112,10 @@ export default function HeroGlobeTags() {
   }, []);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+    <div
+      className="fixed inset-0 pointer-events-none"
+      style={{ zIndex: 10 }}
+    >
       {TAGS.map((tag, i) => {
         const Icon = tag.icon;
         return (

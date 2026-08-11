@@ -99,6 +99,8 @@ export default function LandingPage() {
     <div className="min-h-screen text-zinc-300 selection:bg-red-500 selection:text-white relative">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
+
+      <HeroGlobeTags />
       
       <Navbar />
 
@@ -169,9 +171,7 @@ export default function LandingPage() {
           </div>
 
           {/* Hero Right - Vanta Globe with Orbital Tags */}
-          <div className="lg:col-span-5 relative h-[400px] w-full mt-8 lg:mt-0">
-            <HeroGlobeTags />
-          </div>
+          <div className="lg:col-span-5 relative h-[400px] w-full mt-8 lg:mt-0" />
 
         </div>
       </section>
