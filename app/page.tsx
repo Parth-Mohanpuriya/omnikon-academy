@@ -4,20 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import {
-  Code,
-  Users,
-  GraduationCap,
-  BookOpen,
   ArrowRight,
   Check,
   ChevronDown,
   Terminal,
   Activity,
   GitBranch,
-  Star,
-  Layers,
-  Zap,
-  Globe
+  Star
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -174,92 +167,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Hero Right Graphic - 3D Orbit Visualization */}
-          <div className="lg:col-span-5 relative flex items-center justify-center h-[400px] w-full mt-8 lg:mt-0">
-            {/* Ambient Background Glows */}
-            <div className="absolute h-72 w-72 rounded-full bg-red-500/10 blur-[60px]" />
-            <div className="absolute h-48 w-48 rounded-full bg-red-700/5 blur-[40px]" />
-
-            {/* Orbit Lines */}
-            <div className="absolute h-80 w-80 rounded-full border border-red-500/10 animate-[spin_50s_linear_infinite]" />
-            <div className="absolute h-[240px] w-[240px] rounded-full border border-red-500/20 border-dashed animate-[spin_30s_linear_infinite_reverse]" />
-            <div className="absolute h-40 w-40 rounded-full border border-red-500/15" />
-
-            {/* Center Pulsing Logo */}
-            <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-full border border-red-500 bg-[#030303] shadow-[0_0_35px_rgba(239,68,68,0.4)]">
-              <div className="h-12 w-12 rounded-full border-4 border-red-500 flex items-center justify-center">
-                <div className="absolute h-8 w-1 bg-white rotate-45 transform translate-x-1 translate-y-[-1px]" />
-                <div className="h-3 w-3 rounded-full bg-white animate-ping absolute" />
-                <div className="h-3 w-3 rounded-full bg-white relative z-20" />
-              </div>
-            </div>
-
-            {/* Floating Orbit Items */}
-            {/* Open Source */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-              className="absolute top-2 right-4 flex items-center gap-2 rounded-lg border border-white/5 bg-[#0a0a0c]/90 px-3 py-1.5 shadow-lg backdrop-blur-sm"
-            >
-              <Code className="h-3.5 w-3.5 text-red-500" />
-              <div className="text-left font-mono">
-                <p className="text-[10px] font-bold text-white">Open Source</p>
-                <p className="text-[8px] text-zinc-500">Transparent & Collaborative</p>
-              </div>
-            </motion.div>
-
-            {/* Education */}
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }}
-              className="absolute top-1/2 right-0 transform translate-y-[-50%] flex items-center gap-2 rounded-lg border border-white/5 bg-[#0a0a0c]/90 px-3 py-1.5 shadow-lg backdrop-blur-sm"
-            >
-              <GraduationCap className="h-3.5 w-3.5 text-red-500" />
-              <div className="text-left font-mono">
-                <p className="text-[10px] font-bold text-white">Education</p>
-                <p className="text-[8px] text-zinc-500">Learning & Building</p>
-              </div>
-            </motion.div>
-
-            {/* Documentation */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }}
-              className="absolute bottom-6 right-8 flex items-center gap-2 rounded-lg border border-white/5 bg-[#0a0a0c]/90 px-3 py-1.5 shadow-lg backdrop-blur-sm"
-            >
-              <BookOpen className="h-3.5 w-3.5 text-red-500" />
-              <div className="text-left font-mono">
-                <p className="text-[10px] font-bold text-white">Documentation</p>
-                <p className="text-[8px] text-zinc-500">Guides & Resources</p>
-              </div>
-            </motion.div>
-
-            {/* Innovation */}
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut", delay: 0.2 }}
-              className="absolute bottom-8 left-4 flex items-center gap-2 rounded-lg border border-white/5 bg-[#0a0a0c]/90 px-3 py-1.5 shadow-lg backdrop-blur-sm"
-            >
-              <Zap className="h-3.5 w-3.5 text-red-500" />
-              <div className="text-left font-mono">
-                <p className="text-[10px] font-bold text-white">Innovation</p>
-                <p className="text-[8px] text-zinc-500">Ideas into Impact</p>
-              </div>
-            </motion.div>
-
-            {/* Community */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 4.8, ease: "easeInOut", delay: 0.8 }}
-              className="absolute top-16 left-2 flex items-center gap-2 rounded-lg border border-white/5 bg-[#0a0a0c]/90 px-3 py-1.5 shadow-lg backdrop-blur-sm"
-            >
-              <Users className="h-3.5 w-3.5 text-red-500" />
-              <div className="text-left font-mono">
-                <p className="text-[10px] font-bold text-white">Community</p>
-                <p className="text-[8px] text-zinc-500">Connected & Growing</p>
-              </div>
-            </motion.div>
-          </div>
+          {/* Hero Right - Vanta Globe (rendered globally via VantaBackground) */}
+          <div className="lg:col-span-5 relative h-[400px] w-full mt-8 lg:mt-0" />
 
         </div>
       </section>
