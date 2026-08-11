@@ -10,7 +10,8 @@ import {
   Terminal,
   Activity,
   GitBranch,
-  Star
+  Star,
+  Gamepad2
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -232,6 +233,34 @@ export default function LandingPage() {
               <p className="text-zinc-600 mt-2 hover:text-white transition-colors cursor-pointer border-t border-white/5 pt-1.5 text-right font-bold">[ EXECUTE RUN ]</p>
             </div>
           </div>
+
+          {/* Card: Git Quest */}
+          <Link href="/playground/git-quest" className="glow-card rounded-2xl p-6 flex flex-col justify-between min-h-[300px] group">
+            <div className="space-y-3">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
+                <Gamepad2 className="h-4 w-4" />
+              </span>
+              <h3 className="text-lg font-bold text-white group-hover:text-red-400 transition-colors">Git Quest</h3>
+              <p className="text-sm text-zinc-400">
+                Learn Git & GitHub Actions through an interactive terminal game. Earn XP, unlock badges, and master CI/CD.
+              </p>
+            </div>
+
+            {/* Mini terminal preview */}
+            <div className="mt-6 rounded-lg border border-white/10 bg-[#08080a] p-3 font-mono text-[10px] shadow-2xl">
+              <div className="flex justify-between items-center border-b border-white/5 pb-1.5 mb-2 text-zinc-600">
+                <span>git-quest</span>
+                <span className="flex gap-1"><span className="h-1.5 w-1.5 rounded-full bg-zinc-700" /><span className="h-1.5 w-1.5 rounded-full bg-zinc-700" /></span>
+              </div>
+              <p className="text-terminal-green">$ git init</p>
+              <p className="text-zinc-500">Initialized empty Git repository</p>
+              <p className="text-terminal-green mt-1">$ git add .</p>
+              <p className="text-zinc-500">Staged: index.html</p>
+              <p className="text-terminal-green mt-1">$ git commit -m &quot;first commit&quot;</p>
+              <p className="text-emerald-400">✓ Level complete! +100 XP</p>
+              <p className="text-zinc-600 mt-2 hover:text-red-400 transition-colors cursor-pointer border-t border-white/5 pt-1.5 text-right font-bold">[ START QUEST ]</p>
+            </div>
+          </Link>
 
           {/* Card 2: GitHub PRs */}
           <div className="glow-card rounded-2xl p-6 flex flex-col justify-between min-h-[300px]">
