@@ -16,7 +16,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Marquee from "@/components/Marquee";
 import LiveActivityFeed from "@/components/LiveActivityFeed";
-import HeroGlobeTags from "@/components/HeroGlobeTags";
 import { mockLearningPaths, mockCourses } from "@/lib/mock-data";
 
 // ----------------------------------------------------
@@ -99,8 +98,6 @@ export default function LandingPage() {
     <div className="min-h-screen text-zinc-300 selection:bg-red-500 selection:text-white relative">
       <div className="grid-bg absolute inset-0" />
       <div className="grid-bg-glow" />
-
-      <HeroGlobeTags />
       
       <Navbar />
 
