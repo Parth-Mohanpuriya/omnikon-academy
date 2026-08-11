@@ -298,8 +298,6 @@ body {
 
 /* ─── Tier 1: Base panels ─── */
 .gq-glass-1::before {
-  backdrop-filter: blur(12px) saturate(1.2);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
   background: rgba(10, 15, 26, 0.55);
 }
 .gq-glass-1::after {
@@ -321,8 +319,6 @@ body {
 
 /* ─── Tier 2: Mid panels ─── */
 .gq-glass-2::before {
-  backdrop-filter: blur(18px) saturate(1.3);
-  -webkit-backdrop-filter: blur(18px) saturate(1.3);
   background: rgba(10, 15, 26, 0.50);
 }
 .gq-glass-2::after {
@@ -344,8 +340,6 @@ body {
 
 /* ─── Tier 3: Elevated surfaces ─── */
 .gq-glass-3::before {
-  backdrop-filter: blur(28px) saturate(1.4);
-  -webkit-backdrop-filter: blur(28px) saturate(1.4);
   background: rgba(10, 15, 26, 0.42);
 }
 .gq-glass-3::after {
@@ -393,8 +387,6 @@ body {
 
 /* ─── Focus deepening (terminal input) ─── */
 .gq-glass-focus-within:focus-within::before {
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
   background: rgba(10, 15, 26, 0.45);
 }
 .gq-glass-focus-within:focus-within::after {
@@ -405,18 +397,7 @@ body {
   );
 }
 
-/* ─── Fallback for browsers without backdrop-filter ─── */
-@supports not (backdrop-filter: blur(1px)) {
-  .gq-glass-1::before {
-    background: rgba(10, 15, 26, 0.88);
-  }
-  .gq-glass-2::before {
-    background: rgba(10, 15, 26, 0.85);
-  }
-  .gq-glass-3::before {
-    background: rgba(10, 15, 26, 0.90);
-  }
-}
+
 
 /* ─── Prefers reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
