@@ -11,6 +11,28 @@
   --accent-glow: rgba(236, 72, 153, 0.08);
 
   --terminal-green: 142 76% 45%; /* #10b981 */
+
+  /* ─── Git Quest Design Tokens ─── */
+  --gq-base: #0a0f1a;
+  --gq-surface: #111827;
+  --gq-surface-raised: #1a2332;
+  --gq-border: #1e293b;
+  --gq-border-hover: #334155;
+
+  --gq-text: #e2e8f0;
+  --gq-text-secondary: #94a3b8;
+  --gq-text-muted: #64748b;
+
+  --gq-committed: #2dd4bf;
+  --gq-committed-dim: rgba(45, 212, 191, 0.12);
+  --gq-staged: #f59e0b;
+  --gq-staged-dim: rgba(245, 158, 11, 0.12);
+  --gq-conflict: #f87171;
+  --gq-conflict-dim: rgba(248, 113, 113, 0.12);
+
+  --gq-branch-main: #2dd4bf;
+  --gq-branch-feature: #818cf8;
+  --gq-branch-other: #f472b6;
 }
 
 html {
@@ -25,6 +47,25 @@ html {
   --color-violet-glow: var(--primary-glow);
   --color-accent-glow: var(--accent-glow);
   --color-terminal-green: hsl(var(--terminal-green));
+
+  /* Git Quest tokens */
+  --color-gq-base: var(--gq-base);
+  --color-gq-surface: var(--gq-surface);
+  --color-gq-surface-raised: var(--gq-surface-raised);
+  --color-gq-border: var(--gq-border);
+  --color-gq-border-hover: var(--gq-border-hover);
+  --color-gq-text: var(--gq-text);
+  --color-gq-text-secondary: var(--gq-text-secondary);
+  --color-gq-text-muted: var(--gq-text-muted);
+  --color-gq-committed: var(--gq-committed);
+  --color-gq-committed-dim: var(--gq-committed-dim);
+  --color-gq-staged: var(--gq-staged);
+  --color-gq-staged-dim: var(--gq-staged-dim);
+  --color-gq-conflict: var(--gq-conflict);
+  --color-gq-conflict-dim: var(--gq-conflict-dim);
+  --color-gq-branch-main: var(--gq-branch-main);
+  --color-gq-branch-feature: var(--gq-branch-feature);
+  --color-gq-branch-other: var(--gq-branch-other);
 }
 
 body {
@@ -196,3 +237,55 @@ body {
 .animation-delay-200 { animation-delay: 0.2s; }
 .animation-delay-300 { animation-delay: 0.3s; }
 .animation-delay-400 { animation-delay: 0.4s; }
+
+/* ─── Git Quest Utilities ─── */
+
+/* Panel base for all Git Quest panels */
+.gq-panel {
+  background: var(--gq-surface);
+  border: 1px solid var(--gq-border);
+  border-radius: 8px;
+}
+
+.gq-panel-raised {
+  background: var(--gq-surface-raised);
+  border: 1px solid var(--gq-border);
+  border-radius: 8px;
+}
+
+/* Status dot — consistent across all components */
+.gq-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.gq-dot-committed { background: var(--gq-committed); box-shadow: 0 0 6px var(--gq-committed-dim); }
+.gq-dot-staged { background: var(--gq-staged); box-shadow: 0 0 6px var(--gq-staged-dim); }
+.gq-dot-conflict { background: var(--gq-conflict); box-shadow: 0 0 6px var(--gq-conflict-dim); }
+
+/* Step state indicators — used in PR UI and Actions tab */
+.gq-step-pending { color: var(--gq-text-muted); }
+.gq-step-running { color: var(--gq-staged); }
+.gq-step-passed { color: var(--gq-committed); }
+.gq-step-failed { color: var(--gq-conflict); }
+
+/* Keyboard focus ring — consistent across all interactive elements */
+.gq-focus-ring:focus-visible {
+  outline: 2px solid var(--gq-committed);
+  outline-offset: 2px;
+}
+
+/* Prefers reduced motion — reduce to opacity/position fades */
+@media (prefers-reduced-motion: reduce) {
+  .gq-animate-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: opacity 0.15s ease !important;
+  }
+  .terminal-cursor::after {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}

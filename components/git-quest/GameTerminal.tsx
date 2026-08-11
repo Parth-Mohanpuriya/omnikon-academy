@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { GitBranch, Circle } from "lucide-react";
 import type { TerminalLine } from "@/lib/git-quest/types";
 
 interface GameTerminalProps {
@@ -9,6 +10,8 @@ interface GameTerminalProps {
   onExecute: (command: string) => void;
   allowedCommands: string[];
   isActive: boolean;
+  currentBranch?: string;
+  initialized?: boolean;
 }
 
 const COMMON_PREFIXES = [
@@ -39,6 +42,8 @@ export default function GameTerminal({
   onExecute,
   allowedCommands,
   isActive,
+  currentBranch = "main",
+  initialized = false,
 }: GameTerminalProps) {
   const [input, setInput] = useState("");
   const [cmdHistory, setCmdHistory] = useState<string[]>([]);
@@ -66,11 +71,13 @@ export default function GameTerminal({
       if (!value) return [];
       const lower = value.toLowerCase();
       const all = [...new Set([...COMMON_PREFIXES, ...allowedCommands])];
-      return all.filter(
-        (cmd) =>
-          cmd.toLowerCase().startsWith(lower) ||
-          cmd.toLowerCase().includes(lower)
-      ).slice(0, 6);
+      return all
+        .filter(
+          (cmd) =>
+            cmd.toLowerCase().startsWith(lower) ||
+            cmd.toLowerCase().includes(lower)
+        )
+        .slice(0, 5);
     },
     [allowedCommands]
   );
@@ -80,7 +87,10 @@ export default function GameTerminal({
       e.preventDefault();
       if (showSuggestions && filteredSuggestions[selectedSuggestion]) {
         const suggestion = filteredSuggestions[selectedSuggestion];
-        setInput(suggestion + (suggestion.startsWith("git commit -m") ? ' ""' : ""));
+        setInput(
+          suggestion +
+            (suggestion.startsWith("git commit -m") ? ' ""' : "")
+        );
         setShowSuggestions(false);
         return;
       }
@@ -99,7 +109,8 @@ export default function GameTerminal({
           prev > 0 ? prev - 1 : filteredSuggestions.length - 1
         );
       } else if (cmdHistory.length > 0) {
-        const newIdx = historyIdx < cmdHistory.length - 1 ? historyIdx + 1 : historyIdx;
+        const newIdx =
+          historyIdx < cmdHistory.length - 1 ? historyIdx + 1 : historyIdx;
         setHistoryIdx(newIdx);
         setInput(cmdHistory[cmdHistory.length - 1 - newIdx] ?? "");
       }
@@ -112,9 +123,7 @@ export default function GameTerminal({
       } else {
         const newIdx = historyIdx > 0 ? historyIdx - 1 : -1;
         setHistoryIdx(newIdx);
-        setInput(
-          newIdx >= 0 ? cmdHistory[cmdHistory.length - 1 - newIdx] : ""
-        );
+        setInput(newIdx >= 0 ? cmdHistory[cmdHistory.length - 1 - newIdx] : "");
       }
     } else if (e.key === "Tab") {
       e.preventDefault();
@@ -143,37 +152,57 @@ export default function GameTerminal({
     }
   };
 
-  const getLineColor = (type: TerminalLine["type"]) => {
+  const getLineStyles = (type: TerminalLine["type"]) => {
     switch (type) {
       case "input":
-        return "text-white font-bold";
+        return "text-gq-text font-semibold font-mono";
       case "success":
-        return "text-emerald-400";
+        return "text-gq-committed font-mono";
       case "error":
-        return "text-red-400";
+        return "text-gq-conflict/80 font-mono";
       case "hint":
-        return "text-amber-400";
+        return "text-gq-staged font-mono";
       case "system":
-        return "text-violet-400 font-bold";
+        return "text-gq-text font-bold font-mono tracking-wide";
       default:
-        return "text-zinc-400";
+        return "text-gq-text-secondary font-mono";
     }
   };
 
   return (
     <div
-      className="rounded-xl border border-white/10 bg-[#08080a] overflow-hidden font-mono"
+      className="gq-panel overflow-hidden"
       onClick={() => inputRef.current?.focus()}
     >
-      {/* Title bar */}
-      <div className="flex items-center justify-between border-b border-white/5 bg-[#0a0a0c] px-4 py-2">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-red-500/80" />
-          <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
-          <span className="h-3 w-3 rounded-full bg-green-500/80" />
+      {/* Header bar — diegetic git state, not fake traffic lights */}
+      <div className="flex items-center justify-between border-b border-gq-border bg-gq-base px-4 py-2.5">
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-mono font-bold text-gq-text-secondary uppercase tracking-widest">
+            Terminal
+          </span>
         </div>
-        <span className="text-[10px] text-zinc-500">git-quest-terminal</span>
-        <div className="w-12" />
+        <div className="flex items-center gap-3">
+          {/* Branch indicator */}
+          <div className="flex items-center gap-1.5">
+            <GitBranch className="h-3 w-3 text-gq-text-muted" />
+            <span className="text-[10px] font-mono text-gq-text-secondary">
+              {currentBranch}
+            </span>
+          </div>
+          {/* Repo status dot */}
+          <div className="flex items-center gap-1.5">
+            <Circle
+              className={`h-2 w-2 ${
+                initialized
+                  ? "fill-gq-committed text-gq-committed"
+                  : "fill-gq-text-muted text-gq-text-muted"
+              }`}
+            />
+            <span className="text-[10px] font-mono text-gq-text-muted">
+              {initialized ? "repo" : "no repo"}
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Terminal output */}
@@ -184,21 +213,23 @@ export default function GameTerminal({
         aria-live="polite"
         aria-label="Terminal output"
       >
-        {history.map((line) => (
+        {history.map((line, i) => (
           <motion.div
             key={line.id}
-            initial={{ opacity: 0, x: -4 }}
+            initial={{ opacity: 0, x: -3 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.15 }}
-            className={`${getLineColor(line.type)} whitespace-pre-wrap break-all`}
+            transition={{ duration: 0.12, delay: Math.min(i * 0.02, 0.2) }}
+            className={`${getLineStyles(line.type)} whitespace-pre-wrap break-all`}
           >
             {line.text}
           </motion.div>
         ))}
 
         {/* Input line */}
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-terminal-green select-none">$</span>
+        <div className="flex items-center gap-2 mt-1.5">
+          <span className="text-gq-committed select-none font-mono font-bold">
+            $
+          </span>
           <div className="relative flex-1">
             <input
               ref={inputRef}
@@ -207,47 +238,54 @@ export default function GameTerminal({
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               disabled={!isActive}
-              className="w-full bg-transparent text-white text-xs outline-none caret-terminal-green placeholder-zinc-600"
+              className="w-full bg-transparent text-gq-text text-xs font-mono outline-none caret-gq-committed placeholder-gq-text-muted/50 gq-focus-ring"
               placeholder={isActive ? "Type a command..." : ""}
               aria-label="Terminal command input"
               autoComplete="off"
               spellCheck={false}
             />
           </div>
-          {isActive && <span className="terminal-cursor text-terminal-green" />}
+          {isActive && <span className="terminal-cursor text-gq-committed" />}
         </div>
       </div>
 
-      {/* Autocomplete suggestions */}
-      {showSuggestions && filteredSuggestions.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="border-t border-white/5 bg-[#0c0c0e] p-1"
-          role="listbox"
-          aria-label="Command suggestions"
-        >
-          {filteredSuggestions.map((sug, i) => (
-            <button
-              key={sug}
-              onClick={() => {
-                setInput(sug + (sug.startsWith("git commit -m") ? ' ""' : ""));
-                setShowSuggestions(false);
-                inputRef.current?.focus();
-              }}
-              className={`w-full text-left px-3 py-1.5 text-xs rounded ${
-                i === selectedSuggestion
-                  ? "bg-white/10 text-white"
-                  : "text-zinc-400 hover:bg-white/5"
-              }`}
-              role="option"
-              aria-selected={i === selectedSuggestion}
-            >
-              {sug}
-            </button>
-          ))}
-        </motion.div>
-      )}
+      {/* Autocomplete — anchored to input, tight dropdown */}
+      <AnimatePresence>
+        {showSuggestions && filteredSuggestions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.12 }}
+            className="border-t border-gq-border bg-gq-base p-1"
+            role="listbox"
+            aria-label="Command suggestions"
+          >
+            {filteredSuggestions.map((sug, i) => (
+              <button
+                key={sug}
+                onClick={() => {
+                  setInput(
+                    sug +
+                      (sug.startsWith("git commit -m") ? ' ""' : "")
+                  );
+                  setShowSuggestions(false);
+                  inputRef.current?.focus();
+                }}
+                className={`w-full text-left px-3 py-1.5 text-xs font-mono rounded ${
+                  i === selectedSuggestion
+                    ? "bg-gq-committed/10 text-gq-committed"
+                    : "text-gq-text-secondary hover:bg-gq-surface-raised"
+                }`}
+                role="option"
+                aria-selected={i === selectedSuggestion}
+              >
+                {sug}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
