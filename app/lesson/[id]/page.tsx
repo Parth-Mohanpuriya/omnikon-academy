@@ -232,17 +232,17 @@ export default function LessonPlayerPage({ params }: PageProps) {
                 Workspace Resources
               </div>
               <ul className="space-y-2 text-[10px]">
-                <li className="flex items-center justify-between text-zinc-400 hover:text-white transition-colors cursor-pointer group">
+                <li className="flex items-center justify-between text-zinc-400">
                   <span className="flex items-center gap-1.5">
                     <span className="text-zinc-600">-</span> index.tsx (completed code solution)
                   </span>
-                  <ArrowUpRight className="h-3 w-3 text-zinc-600 group-hover:text-zinc-400" />
+                  <ArrowUpRight className="h-3 w-3 text-zinc-600" />
                 </li>
-                <li className="flex items-center justify-between text-zinc-400 hover:text-white transition-colors cursor-pointer group">
+                <li className="flex items-center justify-between text-zinc-400">
                   <span className="flex items-center gap-1.5">
                     <span className="text-zinc-600">-</span> README.md (systems specifications document)
                   </span>
-                  <ArrowUpRight className="h-3 w-3 text-zinc-600 group-hover:text-zinc-400" />
+                  <ArrowUpRight className="h-3 w-3 text-zinc-600" />
                 </li>
               </ul>
             </div>

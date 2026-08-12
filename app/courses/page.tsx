@@ -161,9 +161,11 @@ export default function CoursesPage() {
                           </div>
 
                           <div className="space-y-2">
-                            <h2 className="text-lg font-bold text-white hover:text-red-400 transition-colors line-clamp-1">
-                              {course.title}
-                            </h2>
+                            <Link href={`/lesson/${firstLessonId}`}>
+                              <h2 className="text-lg font-bold text-white hover:text-red-400 transition-colors line-clamp-1 cursor-pointer">
+                                {course.title}
+                              </h2>
+                            </Link>
                             <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
                               {course.description}
                             </p>

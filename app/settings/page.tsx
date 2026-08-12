@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
@@ -34,9 +34,20 @@ const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabId>("account");
-  const [settings, setSettings] = useState<UserSettings>(mockUserSettings);
+  const [settings, setSettings] = useState<UserSettings>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("omnikon_user_settings");
+      if (stored) return JSON.parse(stored);
+    }
+    return mockUserSettings;
+  });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
+
+  // Persist settings to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem("omnikon_user_settings", JSON.stringify(settings));
+  }, [settings]);
 
   const showNotification = (message: string) => {
     setNotification(message);
@@ -352,11 +363,12 @@ export default function SettingsPage() {
                           THEME
                         </label>
                         <div className="grid grid-cols-3 gap-3">
-                          {["Dark", "Light", "System"].map((theme) => (
+                          {(["Dark", "Light", "System"] as const).map((theme) => (
                             <button
                               key={theme}
-                              className={`p-4 rounded-lg border text-center font-mono text-xs transition-all ${
-                                theme === "Dark"
+                              onClick={() => setSettings({ ...settings, theme })}
+                              className={`p-4 rounded-lg border text-center font-mono text-xs transition-all cursor-pointer ${
+                                settings.theme === theme
                                   ? "border-red-500 bg-red-500/10 text-white"
                                   : "border-white/5 bg-[#0a0a0c] text-zinc-500 hover:border-white/20"
                               }`}

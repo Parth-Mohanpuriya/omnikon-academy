@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,9 +23,37 @@ import { mockUser, mockCourses, Course, UserProgress } from "@/lib/mock-data";
 
 export default function DashboardPage() {
   // Initialize state with mock data to allow local interactivity (like Enrolling in new courses)
-  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>(mockUser.enrolledCourses);
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("omnikon_enrolled_courses");
+      if (stored) return JSON.parse(stored);
+    }
+    return mockUser.enrolledCourses;
+  });
   const [userProgressList, setUserProgressList] = useState<UserProgress[]>(mockUser.progress);
   const [notification, setNotification] = useState<string | null>(null);
+
+  // Persist enrolled courses to localStorage
+  useEffect(() => {
+    localStorage.setItem("omnikon_enrolled_courses", JSON.stringify(enrolledCourseIds));
+  }, [enrolledCourseIds]);
+
+  // Read real lesson completions from localStorage and merge with progress
+  const effectiveProgressList = useMemo(() => {
+    return userProgressList.map((p) => {
+      let completedLessons = p.completedLessons;
+      if (typeof window !== "undefined") {
+        const key = `omnikon_completed_lessons_${p.courseId}`;
+        const stored = localStorage.getItem(key);
+        if (stored) completedLessons = JSON.parse(stored);
+      }
+      const course = mockCourses.find((c) => c.id === p.courseId);
+      let totalLessons = 0;
+      if (course) course.modules.forEach((m) => (totalLessons += m.lessons.length));
+      const progressPercentage = totalLessons > 0 ? Math.round((completedLessons.length / totalLessons) * 100) : 0;
+      return { ...p, completedLessons, progressPercentage };
+    });
+  }, [userProgressList]);
 
   // Group courses into Active/Enrolled vs Available
   const enrolledCourses = useMemo(() => {
@@ -39,11 +67,11 @@ export default function DashboardPage() {
   // Map progress list to courses for easy progress percentage rendering
   const courseProgressMap = useMemo(() => {
     const map: Record<string, UserProgress> = {};
-    userProgressList.forEach((p) => {
+    effectiveProgressList.forEach((p) => {
       map[p.courseId] = p;
     });
     return map;
-  }, [userProgressList]);
+  }, [effectiveProgressList]);
 
   // Handle mock enrollment transition
   const handleEnroll = (courseId: string, courseTitle: string) => {

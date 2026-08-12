@@ -12,15 +12,19 @@ import { mockUser } from "@/lib/mock-data";
 const NAV_LINKS = [
   { label: "Courses", href: "/courses" },
   { label: "Learning Paths", href: "/#learning-paths" },
-  { label: "Projects", href: "/#projects" },
-  { label: "Community", href: "/#community" },
-  { label: "Blog", href: "/#blog" },
-  { label: "About", href: "/#about" },
+  { label: "Projects", href: "/courses" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("omnikon_signed_in") === "true";
+    }
+    return false;
+  });
   const [showDropdown, setShowDropdown] = useState(false);
   const pathname = usePathname();
 
@@ -116,6 +120,7 @@ export default function Navbar() {
                           <button
                             onClick={() => {
                               setIsSignedIn(false);
+                              localStorage.removeItem("omnikon_signed_in");
                               setShowDropdown(false);
                             }}
                             className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/5 transition-colors w-full cursor-pointer"
@@ -133,14 +138,20 @@ export default function Navbar() {
               <>
                 <Link
                   href="/dashboard"
-                  onClick={() => setIsSignedIn(true)}
+                  onClick={() => {
+                    setIsSignedIn(true);
+                    localStorage.setItem("omnikon_signed_in", "true");
+                  }}
                   className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/dashboard"
-                  onClick={() => setIsSignedIn(true)}
+                  onClick={() => {
+                    setIsSignedIn(true);
+                    localStorage.setItem("omnikon_signed_in", "true");
+                  }}
                   className="px-4 py-2 text-xs font-medium text-white/90 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 active:scale-[0.97] transition-all duration-200"
                 >
                   Get Started
@@ -213,6 +224,7 @@ export default function Navbar() {
                     <button
                       onClick={() => {
                         setIsSignedIn(false);
+                        localStorage.removeItem("omnikon_signed_in");
                         setIsOpen(false);
                       }}
                       className="flex items-center gap-3 py-2.5 text-sm font-medium text-zinc-400 hover:text-white cursor-pointer"
@@ -227,6 +239,7 @@ export default function Navbar() {
                       href="/dashboard"
                       onClick={() => {
                         setIsSignedIn(true);
+                        localStorage.setItem("omnikon_signed_in", "true");
                         setIsOpen(false);
                       }}
                       className="flex items-center justify-center rounded-lg py-2.5 text-center text-sm font-medium text-zinc-400 hover:text-white"
@@ -237,6 +250,7 @@ export default function Navbar() {
                       href="/dashboard"
                       onClick={() => {
                         setIsSignedIn(true);
+                        localStorage.setItem("omnikon_signed_in", "true");
                         setIsOpen(false);
                       }}
                       className="block rounded-lg py-3 text-center text-xs font-medium text-white/90 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all duration-200"

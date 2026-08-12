@@ -99,6 +99,7 @@ export interface UserSettings {
   profileVisibility: boolean;
   showActivityStatus: boolean;
   fontSize: 'small' | 'medium' | 'large';
+  theme: 'Dark' | 'Light' | 'System';
 }
 
 // ----------------------------------------------------
@@ -856,5 +857,6 @@ export const mockUserSettings: UserSettings = {
   newsletter: true,
   profileVisibility: true,
   showActivityStatus: true,
-  fontSize: 'medium'
+  fontSize: 'medium',
+  theme: 'Dark'
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -25,13 +25,21 @@ import { mockUser, mockCourses, mockActivities, User } from "@/lib/mock-data";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: mockUser.name,
-    email: mockUser.email,
-    bio: "Full-stack developer passionate about React and Go. Learning system design and distributed systems.",
-    location: "San Francisco, CA",
-    joinedDate: "January 2024"
+  const [profileData, setProfileData] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("omnikon_profile_overrides");
+      if (stored) return JSON.parse(stored);
+    }
+    return {
+      name: mockUser.name,
+      email: mockUser.email,
+      bio: "Full-stack developer passionate about React and Go. Learning system design and distributed systems.",
+      location: "San Francisco, CA",
+      joinedDate: "January 2024"
+    };
   });
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Calculate stats
   const enrolledCourses = mockCourses.filter((c) =>
@@ -61,8 +69,23 @@ export default function ProfilePage() {
   ];
 
   const handleSave = () => {
+    localStorage.setItem("omnikon_profile_overrides", JSON.stringify(profileData));
     setIsEditing(false);
-    // In real app, would save to backend
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setAvatarPreview(ev.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -85,11 +108,27 @@ export default function ProfilePage() {
             <div className="flex flex-col md:flex-row gap-6">
               {/* Avatar */}
               <div className="relative h-24 w-24 rounded-xl border border-red-500/20 bg-zinc-900 overflow-hidden flex items-center justify-center flex-shrink-0">
-                <UserIcon className="h-10 w-10 text-red-500" />
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="Avatar" className="h-full w-full object-cover" />
+                ) : (
+                  <UserIcon className="h-10 w-10 text-red-500" />
+                )}
                 {isEditing && (
-                  <button className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                    <Edit3 className="h-5 w-5 text-white" />
-                  </button>
+                  <>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                      className="hidden"
+                    />
+                    <button
+                      onClick={handleAvatarClick}
+                      className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
+                    >
+                      <Edit3 className="h-5 w-5 text-white" />
+                    </button>
+                  </>
                 )}
               </div>
 
@@ -242,6 +281,19 @@ export default function ProfilePage() {
                     const progress = mockUser.progress.find(
                       (p) => p.courseId === course.id
                     );
+                    // Find next incomplete lesson
+                    let nextLessonId = course.modules[0]?.lessons[0]?.id || "";
+                    if (progress) {
+                      for (const mod of course.modules) {
+                        for (const les of mod.lessons) {
+                          if (!progress.completedLessons.includes(les.id)) {
+                            nextLessonId = les.id;
+                            break;
+                          }
+                        }
+                        if (nextLessonId !== course.modules[0]?.lessons[0]?.id) break;
+                      }
+                    }
                     return (
                       <div
                         key={course.id}
@@ -281,7 +333,7 @@ export default function ProfilePage() {
                         </div>
 
                         <Link
-                          href="/dashboard"
+                          href={`/lesson/${nextLessonId}`}
                           className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-[#0e0e11] hover:bg-white/5 py-2 text-center text-xs font-mono text-zinc-300 hover:text-white transition-all uppercase"
                         >
                           CONTINUE_LEARNING

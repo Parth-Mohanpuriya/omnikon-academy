@@ -136,7 +136,7 @@ export default function LandingPage() {
                 Explore Projects
               </Link>
               <Link
-                href="/dashboard"
+                href="/about"
                 className="rounded-lg border border-white/10 bg-[#0c0c0e] hover:bg-[#121215] px-6 py-3 text-sm font-medium text-zinc-300 hover:text-white transition-all"
               >
                 Join Community
@@ -167,9 +167,6 @@ export default function LandingPage() {
               </ul>
             </div>
           </div>
-
-          {/* Hero Right - Vanta Globe with Orbital Tags */}
-          <div className="lg:col-span-5 relative h-[400px] w-full mt-8 lg:mt-0" />
 
         </div>
       </section>
@@ -230,7 +227,7 @@ export default function LandingPage() {
               <p className="text-white mt-1"><span className="text-zinc-500">func</span> main() &#123;</p>
               <p className="text-zinc-400 pl-4">fmt.Println(<span className="text-red-400">"Omnikon System Ready."</span>)</p>
               <p className="text-white">&#125;</p>
-              <p className="text-zinc-600 mt-2 hover:text-white transition-colors cursor-pointer border-t border-white/5 pt-1.5 text-right font-bold">[ EXECUTE RUN ]</p>
+              <p className="text-zinc-600 mt-2 border-t border-white/5 pt-1.5 text-right font-bold">[ EXECUTE RUN ]</p>
             </div>
           </div>
 
