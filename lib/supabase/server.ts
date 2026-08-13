@@ -17,9 +17,8 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );
-          } catch {
-            // Called from a Server Component. Ignore if setting cookies from
-            // a Server Component — middleware will handle refreshing.
+          } catch (err) {
+            console.error("Error setting cookies:", err);
           }
         },
       },
