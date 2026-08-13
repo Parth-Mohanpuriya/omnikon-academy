@@ -20,6 +20,7 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
       provider,
       options: {
         redirectTo: `${location.origin}/auth/callback`,
+        queryParams: provider === "google" ? { prompt: "select_account" } : undefined,
       },
     });
   };
