@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogOut, Settings, User } from "lucide-react";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 import Logo from "@/components/Logo";
-import { mockUser } from "@/lib/mock-data";
+import SignInModal from "@/components/SignInModal";
+import { createClient } from "@/lib/supabase/client";
 
 const NAV_LINKS = [
   { label: "Courses", href: "/courses" },
@@ -19,20 +21,49 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("omnikon_signed_in") === "true";
-    }
-    return false;
-  });
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
-  const userInitials = mockUser.name
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setShowDropdown(false);
+    router.push("/");
+  };
+
+  const isSignedIn = !!user;
+
+  const displayName =
+    user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+  const displayEmail = user?.email || "";
+  const avatarUrl = user?.user_metadata?.avatar_url;
+
+  const userInitials = displayName
     .split(" ")
-    .map((n) => n[0])
+    .map((n: string) => n[0])
     .join("")
-    .toUpperCase();
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#030303]/80 backdrop-blur-md">
@@ -71,13 +102,17 @@ export default function Navbar() {
 
           {/* Action Buttons / Profile */}
           <div className="hidden md:flex items-center gap-4">
-            {isSignedIn ? (
+            {!loading && isSignedIn ? (
               <div className="relative">
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="flex items-center justify-center h-9 w-9 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white text-sm font-bold ring-2 ring-white/10 hover:ring-white/20 transition-all cursor-pointer"
+                  className="flex items-center justify-center h-9 w-9 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white text-sm font-bold ring-2 ring-white/10 hover:ring-white/20 transition-all cursor-pointer overflow-hidden"
                 >
-                  {userInitials}
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt={displayName} className="h-full w-full object-cover" />
+                  ) : (
+                    userInitials
+                  )}
                 </button>
 
                 <AnimatePresence>
@@ -95,8 +130,8 @@ export default function Navbar() {
                         className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-white/10 bg-[#0c0c0e] shadow-2xl overflow-hidden z-50"
                       >
                         <div className="px-4 py-3 border-b border-white/5">
-                          <p className="text-sm font-medium text-white">{mockUser.name}</p>
-                          <p className="text-xs text-zinc-500 mt-0.5">{mockUser.email}</p>
+                          <p className="text-sm font-medium text-white">{displayName}</p>
+                          <p className="text-xs text-zinc-500 mt-0.5">{displayEmail}</p>
                         </div>
                         <div className="py-1">
                           <Link
@@ -118,11 +153,7 @@ export default function Navbar() {
                         </div>
                         <div className="border-t border-white/5 py-1">
                           <button
-                            onClick={() => {
-                              setIsSignedIn(false);
-                              localStorage.removeItem("omnikon_signed_in");
-                              setShowDropdown(false);
-                            }}
+                            onClick={handleSignOut}
                             className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-white/5 transition-colors w-full cursor-pointer"
                           >
                             <LogOut className="h-4 w-4" />
@@ -134,38 +165,34 @@ export default function Navbar() {
                   )}
                 </AnimatePresence>
               </div>
-            ) : (
+            ) : !loading ? (
               <>
-                <Link
-                  href="/dashboard"
-                  onClick={() => {
-                    setIsSignedIn(true);
-                    localStorage.setItem("omnikon_signed_in", "true");
-                  }}
-                  className="text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                <button
+                  onClick={() => setShowSignInModal(true)}
+                  className="text-sm font-medium text-zinc-400 hover:text-white transition-colors cursor-pointer"
                 >
                   Sign In
-                </Link>
-                <Link
-                  href="/dashboard"
-                  onClick={() => {
-                    setIsSignedIn(true);
-                    localStorage.setItem("omnikon_signed_in", "true");
-                  }}
-                  className="px-4 py-2 text-xs font-medium text-white/90 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 active:scale-[0.97] transition-all duration-200"
+                </button>
+                <button
+                  onClick={() => setShowSignInModal(true)}
+                  className="px-4 py-2 text-xs font-medium text-white/90 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 active:scale-[0.97] transition-all duration-200 cursor-pointer"
                 >
                   Get Started
-                </Link>
+                </button>
               </>
-            )}
+            ) : null}
           </div>
 
           {/* Mobile Menu Toggle */}
           <div className="flex md:hidden items-center gap-3">
-            {isSignedIn && (
+            {!loading && isSignedIn && (
               <Link href="/profile">
-                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white text-xs font-bold ring-2 ring-white/10">
-                  {userInitials}
+                <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white text-xs font-bold ring-2 ring-white/10 overflow-hidden">
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt={displayName} className="h-full w-full object-cover" />
+                  ) : (
+                    userInitials
+                  )}
                 </div>
               </Link>
             )}
@@ -201,15 +228,19 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="mt-6 border-t border-white/5 pt-6 flex flex-col gap-4">
-                {isSignedIn ? (
+                {!loading && isSignedIn ? (
                   <>
                     <Link
                       href="/profile"
                       onClick={() => setIsOpen(false)}
                       className="flex items-center gap-3 py-2.5 text-sm font-medium text-zinc-400 hover:text-white"
                     >
-                      <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white text-xs font-bold">
-                        {userInitials}
+                      <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-br from-red-500 to-red-700 text-white text-xs font-bold overflow-hidden">
+                        {avatarUrl ? (
+                          <img src={avatarUrl} alt={displayName} className="h-full w-full object-cover" />
+                        ) : (
+                          userInitials
+                        )}
                       </div>
                       Profile
                     </Link>
@@ -223,8 +254,7 @@ export default function Navbar() {
                     </Link>
                     <button
                       onClick={() => {
-                        setIsSignedIn(false);
-                        localStorage.removeItem("omnikon_signed_in");
+                        handleSignOut();
                         setIsOpen(false);
                       }}
                       className="flex items-center gap-3 py-2.5 text-sm font-medium text-zinc-400 hover:text-white cursor-pointer"
@@ -233,37 +263,35 @@ export default function Navbar() {
                       Sign Out
                     </button>
                   </>
-                ) : (
+                ) : !loading ? (
                   <>
-                    <Link
-                      href="/dashboard"
+                    <button
                       onClick={() => {
-                        setIsSignedIn(true);
-                        localStorage.setItem("omnikon_signed_in", "true");
+                        setShowSignInModal(true);
                         setIsOpen(false);
                       }}
-                      className="flex items-center justify-center rounded-lg py-2.5 text-center text-sm font-medium text-zinc-400 hover:text-white"
+                      className="flex items-center justify-center rounded-lg py-2.5 text-center text-sm font-medium text-zinc-400 hover:text-white cursor-pointer"
                     >
                       Sign In
-                    </Link>
-                    <Link
-                      href="/dashboard"
+                    </button>
+                    <button
                       onClick={() => {
-                        setIsSignedIn(true);
-                        localStorage.setItem("omnikon_signed_in", "true");
+                        setShowSignInModal(true);
                         setIsOpen(false);
                       }}
-                      className="block rounded-lg py-3 text-center text-xs font-medium text-white/90 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all duration-200"
+                      className="block rounded-lg py-3 text-center text-xs font-medium text-white/90 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer"
                     >
                       Get Started
-                    </Link>
+                    </button>
                   </>
-                )}
+                ) : null}
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <SignInModal isOpen={showSignInModal} onClose={() => setShowSignInModal(false)} />
     </header>
   );
 }
