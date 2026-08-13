@@ -3,13 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const protectedRoutes = ["/dashboard", "/profile", "/settings"];
 
-export async function proxy(request: NextRequest) {
-  console.log("[PROXY] Request path:", request.nextUrl.pathname);
-  console.log("[PROXY] Request cookies count:", request.cookies.getAll().length);
-  request.cookies.getAll().forEach((c) => {
-    console.log(`[PROXY]   cookie: ${c.name} = ${c.value.substring(0, 30)}${c.value.length > 30 ? "..." : ""}`);
-  });
-
+export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -18,49 +12,48 @@ export async function proxy(request: NextRequest) {
     {
       cookies: {
         getAll() {
-          const all = request.cookies.getAll();
-          console.log("[PROXY] supabase getAll() called, returning", all.length, "cookies");
-          return all;
+          return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          console.log("[PROXY] supabase setAll() called with", cookiesToSet.length, "cookies:");
-          cookiesToSet.forEach(({ name, value, options }) => {
-            console.log(`[PROXY]   setting: ${name} = ${value.substring(0, 30)}${value.length > 30 ? "..." : ""}`);
-            request.cookies.set(name, value);
-          });
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          );
           supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) => {
-            supabaseResponse.cookies.set(name, value, options);
-          });
-          console.log("[PROXY] setAll complete. supabaseResponse cookies:", supabaseResponse.cookies.getAll().length);
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
         },
       },
     }
   );
 
-  console.log("[PROXY] Calling getUser()...");
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error) {
-    console.error("[PROXY] getUser() error:", error.message);
-  }
-  console.log("[PROXY] getUser() result:", user ? `user found (id: ${user.id}, email: ${user.email})` : "NO USER");
-
   const isProtected = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   );
 
-  if (isProtected && !user) {
-    console.log("[PROXY] Protected route, no user — redirecting to /");
-    return NextResponse.redirect(new URL("/", request.url));
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.startsWith("sb-") && c.name.endsWith("-auth-token"));
+
+  let user = null;
+
+  if (isProtected || hasAuthCookie) {
+    const {
+      data: { user: supabaseUser },
+    } = await supabase.auth.getUser();
+    user = supabaseUser;
   }
 
-  console.log("[PROXY] Passing through. Response cookies:", supabaseResponse.cookies.getAll().length);
+  if (isProtected && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
+
   return supabaseResponse;
 }
+
 
 export const config = {
   matcher: [
