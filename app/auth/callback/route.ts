@@ -11,8 +11,16 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      const forwardedHost = request.headers.get("x-forwarded-host");
+      const isLocalEnv = process.env.NODE_ENV === "development";
+      let redirectUrl = `${origin}${next}`;
+
+      if (!isLocalEnv && forwardedHost) {
+        redirectUrl = `https://${forwardedHost}${next}`;
+      }
+
       const cookieStore = await cookies();
-      const response = NextResponse.redirect(`${origin}${next}`);
+      const response = NextResponse.redirect(redirectUrl);
       cookieStore.getAll().forEach(({ name, value }) => {
         response.cookies.set(name, value);
       });
