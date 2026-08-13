@@ -2,6 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+const COOKIE_OPTIONS = {
+  path: "/",
+  sameSite: "lax" as const,
+  httpOnly: false,
+  maxAge: 400 * 24 * 60 * 60,
+};
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
@@ -22,7 +29,7 @@ export async function GET(request: Request) {
       const cookieStore = await cookies();
       const response = NextResponse.redirect(redirectUrl);
       cookieStore.getAll().forEach(({ name, value }) => {
-        response.cookies.set(name, value);
+        response.cookies.set(name, value, COOKIE_OPTIONS);
       });
       return response;
     }
