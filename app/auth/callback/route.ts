@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -10,8 +11,14 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      const cookieStore = await cookies();
+      const response = NextResponse.redirect(`${origin}${next}`);
+      cookieStore.getAll().forEach(({ name, value }) => {
+        response.cookies.set(name, value);
+      });
+      return response;
     }
+    console.error("Auth code exchange error:", error);
   }
 
   return NextResponse.redirect(`${origin}/?error=auth_failed`);
