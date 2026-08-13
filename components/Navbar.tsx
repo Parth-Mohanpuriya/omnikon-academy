@@ -166,20 +166,12 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
             ) : !loading ? (
-              <>
                 <button
                   onClick={() => setShowSignInModal(true)}
                   className="text-sm font-medium text-zinc-400 hover:text-white transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
-                <button
-                  onClick={() => setShowSignInModal(true)}
-                  className="px-4 py-2 text-xs font-medium text-white/90 rounded-lg border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 active:scale-[0.97] transition-all duration-200 cursor-pointer"
-                >
-                  Get Started
-                </button>
-              </>
             ) : null}
           </div>
 
@@ -264,7 +256,6 @@ export default function Navbar() {
                     </button>
                   </>
                 ) : !loading ? (
-                  <>
                     <button
                       onClick={() => {
                         setShowSignInModal(true);
@@ -274,16 +265,6 @@ export default function Navbar() {
                     >
                       Sign In
                     </button>
-                    <button
-                      onClick={() => {
-                        setShowSignInModal(true);
-                        setIsOpen(false);
-                      }}
-                      className="block rounded-lg py-3 text-center text-xs font-medium text-white/90 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer"
-                    >
-                      Get Started
-                    </button>
-                  </>
                 ) : null}
               </div>
             </div>
